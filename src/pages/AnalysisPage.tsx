@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useGameStore } from '../stores/gameStore';
 import { Button, LoadingSpinner } from '../components/ui';
 import type { AnalysisData } from '../types/game';
@@ -7,6 +7,7 @@ const AnalysisPage: React.FC = () => {
   const { gameState, getAnalysis, resetGame, setCurrentPage } = useGameStore();
   const [analysisData, setAnalysisData] = useState<AnalysisData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const isLoadingRef = useRef(false);
 
   useEffect(() => {
     if (!gameState) {
@@ -14,15 +15,23 @@ const AnalysisPage: React.FC = () => {
       return;
     }
 
+    if (analysisData || isLoadingRef.current) {
+      return;
+    }
+
     const loadAnalysis = async () => {
+      if (isLoadingRef.current) return;
+
+      isLoadingRef.current = true;
       setIsLoading(true);
       const data = await getAnalysis();
       setAnalysisData(data);
       setIsLoading(false);
+      isLoadingRef.current = false;
     };
 
     loadAnalysis();
-  }, [gameState, getAnalysis, setCurrentPage]);
+  }, [gameState, analysisData]);
 
   const handleNewGame = () => {
     resetGame();
