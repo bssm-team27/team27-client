@@ -1,0 +1,35 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    font-family: system-ui, sans-serif;
+  }
+
+  body {
+    @apply bg-gradient-to-b from-ocean-50 to-ocean-100 min-h-screen;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply bg-ocean-600 hover:bg-ocean-700 text-white font-medium py-3 px-6 rounded-lg transition-colors duration-200 shadow-lg hover:shadow-xl;
+  }
+
+  .btn-secondary {
+    @apply bg-white hover:bg-gray-50 text-ocean-700 font-medium py-3 px-6 rounded-lg border-2 border-ocean-200 transition-all duration-200 shadow-md hover:shadow-lg;
+  }
+
+  .card {
+    @apply bg-white rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-200 border border-ocean-100;
+  }
+
+  .game-choice {
+    @apply bg-white hover:bg-ocean-50 border-2 border-ocean-200 hover:border-ocean-400 rounded-lg p-4 transition-all duration-200 cursor-pointer;
+  }
+
+  .game-choice.selected {
+    @apply border-ocean-500 bg-ocean-50;
+  }
+}
