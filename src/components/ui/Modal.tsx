@@ -34,8 +34,8 @@ const Modal: React.FC<ModalProps> = ({
         onClick={(e) => e.stopPropagation()}
       >
         {title && (
-          <div className="px-6 py-4 border-b border-gray-200 bg-ocean-50">
-            <h2 className="text-xl font-semibold text-ocean-800">{title}</h2>
+          <div className="px-6 py-4 border-b border-gray-200 bg-sky-50">
+            <h2 className="text-xl font-semibold text-sky-800">{title}</h2>
             <button
               onClick={onClose}
               className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition-colors"

@@ -1,5 +1,5 @@
 import React from 'react';
-import type {LoadingSpinnerProps} from '../../types/game';
+import type { LoadingSpinnerProps } from '../../types/game';
 
 const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({
   size = 'md',
@@ -21,7 +21,7 @@ const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({
     <div className={`flex flex-col items-center justify-center ${containerSizeClasses[size]}`}>
       <div className={`animate-spin ${sizeClasses[size]} mb-4`}>
         <svg
-          className="text-ocean-600"
+          className="text-sky-600"
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
           viewBox="0 0 24 24"
@@ -42,7 +42,7 @@ const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({
         </svg>
       </div>
       {message && (
-        <p className="text-ocean-700 text-center font-medium animate-pulse">
+        <p className="text-sky-700 text-center font-medium animate-pulse">
           {message}
         </p>
       )}

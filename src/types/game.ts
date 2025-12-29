@@ -1,3 +1,5 @@
+import type { ReactNode } from 'react';
+
 // Game Types
 export type ParticipantType = 'single' | 'double' | 'group';
 export type ActivityType = 'swimming' | 'fishing' | 'leisure';
@@ -59,6 +61,14 @@ export interface GameChoice {
 }
 
 // Analysis Types
+export interface ScenarioFeedback {
+  scenarioId: string;
+  chosenChoice: Choice;
+  optimalChoice: Choice;
+  feedback: string;
+  impact: 'positive' | 'negative' | 'neutral';
+}
+
 export interface AnalysisData {
   totalScore: number;
   maxScore: number;
@@ -67,14 +77,6 @@ export interface AnalysisData {
   improvements: string[];
   detailedFeedback: ScenarioFeedback[];
   summary: string;
-}
-
-export interface ScenarioFeedback {
-  scenarioId: string;
-  chosenChoice: Choice;
-  optimalChoice: Choice;
-  feedback: string;
-  impact: 'positive' | 'negative' | 'neutral';
 }
 
 // Game Creation Response
@@ -116,7 +118,7 @@ export interface ButtonProps {
   disabled?: boolean;
   loading?: boolean;
   onClick: () => void;
-  children: React.ReactNode;
+  children: ReactNode;
   className?: string;
 }
 

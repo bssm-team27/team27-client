@@ -1,5 +1,5 @@
 import React from 'react';
-import type {ButtonProps} from '../../types/game';
+import type { ButtonProps } from '../../types/game';
 
 const Button: React.FC<ButtonProps> = ({
   variant,
@@ -13,8 +13,8 @@ const Button: React.FC<ButtonProps> = ({
   const baseClasses = 'inline-flex items-center justify-center font-medium transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed';
 
   const variantClasses = {
-    primary: 'bg-ocean-600 hover:bg-ocean-700 text-white focus:ring-ocean-500 shadow-lg hover:shadow-xl',
-    secondary: 'bg-white hover:bg-gray-50 text-ocean-700 border-2 border-ocean-200 hover:border-ocean-400 focus:ring-ocean-500 shadow-md hover:shadow-lg',
+    primary: 'bg-sky-600 hover:bg-sky-700 text-white focus:ring-sky-500 shadow-lg hover:shadow-xl',
+    secondary: 'bg-white hover:bg-gray-50 text-sky-700 border-2 border-sky-200 hover:border-sky-400 focus:ring-sky-500 shadow-md hover:shadow-lg',
     danger: 'bg-red-600 hover:bg-red-700 text-white focus:ring-red-500 shadow-lg hover:shadow-xl'
   };
 

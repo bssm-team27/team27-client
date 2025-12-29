@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ChoiceListProps } from '../../types/game';
+import type { ChoiceListProps } from '../../types/game';
 
 const ChoiceList: React.FC<ChoiceListProps> = ({
   choices,
@@ -54,7 +54,7 @@ const ChoiceList: React.FC<ChoiceListProps> = ({
                 className={`
                   relative p-6 rounded-xl border-2 transition-all duration-300 text-left
                   ${isSelected
-                    ? 'bg-ocean-600 border-ocean-400 text-white transform scale-105 shadow-2xl'
+                    ? 'bg-sky-600 border-sky-400 text-white transform scale-105 shadow-2xl'
                     : `bg-white/95 backdrop-blur-sm hover:bg-white text-gray-800 shadow-lg hover:shadow-xl transform hover:scale-102 ${getSafetyColor(choice.safetyRating)}`
                   }
                   ${disabled ? 'cursor-not-allowed opacity-50' : 'cursor-pointer'}
@@ -68,8 +68,8 @@ const ChoiceList: React.FC<ChoiceListProps> = ({
                 <div className={`
                   absolute top-3 left-3 w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold
                   ${isSelected
-                    ? 'bg-white text-ocean-600'
-                    : 'bg-ocean-600 text-white'
+                    ? 'bg-white text-sky-600'
+                    : 'bg-sky-600 text-white'
                   }
                 `}>
                   {choiceNumber}
@@ -86,7 +86,7 @@ const ChoiceList: React.FC<ChoiceListProps> = ({
                   </p>
 
                   {choice.explanation && (
-                    <p className={`mt-3 text-sm ${isSelected ? 'text-ocean-100' : 'text-gray-600'}`}>
+                    <p className={`mt-3 text-sm ${isSelected ? 'text-sky-100' : 'text-gray-600'}`}>
                       {choice.explanation}
                     </p>
                   )}
@@ -94,9 +94,9 @@ const ChoiceList: React.FC<ChoiceListProps> = ({
 
                 {/* 선택 완료 표시 */}
                 {isSelected && (
-                  <div className="absolute inset-0 flex items-center justify-center bg-ocean-600/20 rounded-xl">
+                  <div className="absolute inset-0 flex items-center justify-center bg-sky-600/20 rounded-xl">
                     <div className="bg-white rounded-full p-3 animate-bounce">
-                      <svg className="w-6 h-6 text-ocean-600" fill="currentColor" viewBox="0 0 20 20">
+                      <svg className="w-6 h-6 text-sky-600" fill="currentColor" viewBox="0 0 20 20">
                         <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                       </svg>
                     </div>

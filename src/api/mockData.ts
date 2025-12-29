@@ -1,4 +1,4 @@
-import {
+import type {
   Scenario,
   GameCreationResponse,
   ChoiceResponse,
