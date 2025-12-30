@@ -51,7 +51,7 @@ const GameplayPage: React.FC = () => {
   if (!gameState || !currentScenario) {
     return (
       <div className="relative min-h-screen bg-black text-white flex items-center justify-center p-4">
-        <div className="absolute inset-0 bg-gradient-to-b from-white/10 via-white/5 to-black" />
+        <div className="absolute inset-0 bg-linear-to-b from-white/10 via-white/5 to-black" />
         <div className="card p-8 text-center bg-white/10 backdrop-blur border border-white/30 relative z-10 text-white">
           <LoadingSpinner size="lg" message="게임을 불러오는 중..." />
         </div>
