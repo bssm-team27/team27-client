@@ -71,7 +71,7 @@ const GameSetupPage: React.FC = () => {
 
   return (
     <div
-      className="relative min-h-screen bg-cover bg-center p-4"
+      className="relative min-h-screen bg-cover bg-center p-4 flex items-center justify-center "
       style={{ backgroundImage: `url(${selectedBackground})` }}
     >
       <div className="absolute inset-0 bg-black/30" />
@@ -95,7 +95,7 @@ const GameSetupPage: React.FC = () => {
         <div className="grid lg:grid-cols-2 gap-8">
           {/* 참가자 수 선택 */}
           <div className="card p-8 animate-slide-up bg-white/10 backdrop-blur border border-white/30">
-            <h2 className="text-xl font-semibold text-gray-800 mb-6 flex items-center">
+            <h2 className="text-xl font-semibold text-white mb-6 flex items-center">
               <div className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center mr-3">
                 <span className="text-white/50 font-bold">1</span>
               </div>
@@ -144,7 +144,7 @@ const GameSetupPage: React.FC = () => {
 
           {/* 활동 선택 */}
           <div className="card p-8 animate-slide-up bg-white/10 backdrop-blur border border-white/30" style={{ animationDelay: '200ms' }}>
-            <h2 className="text-xl font-semibold text-gray-800 mb-6 flex items-center">
+            <h2 className="text-xl font-semibold text-white mb-6 flex items-center">
               <div className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center mr-3">
                 <span className="text-white/50 font-bold">2</span>
               </div>
@@ -200,8 +200,8 @@ const GameSetupPage: React.FC = () => {
               onClick={handleStartGame}
               className="
                 px-16 py-4 text-lg
-                !bg-black/30 !text-white
-                hover:!bg-black/15
+                !bg-white/10 backdrop-blur !text-white
+                hover:!bg-white/25
                 shadow-xl hover:shadow-2xl
                 transform hover:-translate-y-1
                 transition-all duration-300
