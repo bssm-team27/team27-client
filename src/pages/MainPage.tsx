@@ -27,8 +27,11 @@ const MainPage: React.FC = () => {
       <div className="max-w-4xl mx-auto text-center relative z-10">
         {/* 헤더 */}
           <div className="flex flex-col items-center mb-2">
+              <h1 className="text-7xl font-bold text-white mb-10">
+                  그날, 바다는 선택을 요구했다
+              </h1>
             <div>
-                <h1 className="text-4xl font-bold text-white">
+                <h1 className="text-3xl font-bold text-white/80">
                   화면을 클릭해서 게임을 시작하세요
                 </h1>
                 <p className="mt-4 text-sm text-white opacity-70 mb-2">
