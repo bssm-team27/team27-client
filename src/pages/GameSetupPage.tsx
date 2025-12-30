@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, {useMemo, useState} from 'react';
 import { useGameStore } from '../stores/gameStore';
 import { Button, LoadingSpinner } from '../components/ui';
 import type { ParticipantType, ActivityType } from '../types/game';
+import { getRandomBackground } from '../utils/randomBackground';
 
 const GameSetupPage: React.FC = () => {
   const { gameState, createGame, setCurrentPage } = useGameStore();
@@ -17,7 +18,7 @@ const GameSetupPage: React.FC = () => {
   const handleStartGame = async () => {
     await createGame({ participants, activity });
   };
-
+  const backgroundImage = useMemo(() => getRandomBackground(), []);
   const participantOptions = [
     { value: 'single' as ParticipantType, label: '혼자', description: '1인 활동 시나리오', icon: '🧑‍🦲' },
     { value: 'double' as ParticipantType, label: '둘이서', description: '2인 활동 시나리오', icon: '👫' },
@@ -53,7 +54,7 @@ const GameSetupPage: React.FC = () => {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-sky-100 to-sky-200 flex items-center justify-center">
+      <div className="min-h-screen" style={{ backgroundImage: `url(${backgroundImage})` }}>
         <div className="card p-12 text-center max-w-md">
           <LoadingSpinner size="lg" message="AI가 맞춤형 시나리오를 생성하고 있습니다..." />
         </div>
@@ -62,21 +63,21 @@ const GameSetupPage: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-sky-100 to-sky-200 py-8 px-4">
+    <div className="min-h-screen" style={{ backgroundImage: `url(${backgroundImage})` }}>
       <div className="max-w-4xl mx-auto">
         {/* 헤더 */}
         <div className="text-center mb-8 animate-fade-in">
           <button
             onClick={handleBack}
-            className="inline-flex items-center text-sky-600 hover:text-sky-700 mb-4 transition-colors"
+            className="inline-flex items-center text-gray-600 hover:text-white mb-4 transition-colors"
           >
             <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
             </svg>
             메인으로 돌아가기
           </button>
-          <h1 className="text-3xl font-bold text-sky-800 mb-2">게임 설정</h1>
-          <p className="text-sky-700">상황을 선택하면 AI가 맞춤형 시나리오를 생성합니다</p>
+          <h1 className="text-3xl font-bold text-white mb-2">게임 설정</h1>
+          <p className="text-white">상황을 선택하면 AI가 맞춤형 시나리오를 생성합니다</p>
         </div>
 
         <div className="grid lg:grid-cols-2 gap-8">
@@ -174,17 +175,20 @@ const GameSetupPage: React.FC = () => {
         {/* 게임 생성 버튼 */}
         <div className="text-center mt-8 animate-fade-in" style={{ animationDelay: '400ms' }}>
           <Button
-            variant="primary"
-            size="lg"
-            onClick={handleStartGame}
-            className="px-16 py-4 text-lg shadow-xl hover:shadow-2xl transform hover:-translate-y-1 transition-all duration-300"
-          >
-            <svg className="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-            </svg>
+              variant="primary"
+              size="lg"
+              onClick={handleStartGame}
+              className="
+                px-16 py-4 text-lg
+                !bg-black/30 !text-white
+                hover:!bg-black/15
+                shadow-xl hover:shadow-2xl
+                transform hover:-translate-y-1
+                transition-all duration-300
+              " >
             시나리오 생성하기
           </Button>
-          <p className="mt-4 text-sm text-sky-600">
+          <p className="mt-4 text-sm text-white">
             선택한 설정을 바탕으로 맞춤형 시나리오가 생성됩니다
           </p>
         </div>
