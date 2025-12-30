@@ -26,19 +26,19 @@ const Modal: React.FC<ModalProps> = ({
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black bg-opacity-50 backdrop-blur-sm"
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur"
       onClick={onClose}
     >
       <div
-        className={`bg-white rounded-xl shadow-2xl ${sizeClasses[size]} w-full max-h-[90vh] overflow-hidden animate-fade-in`}
+        className={`bg-white/12 border border-white/25 backdrop-blur rounded-xl shadow-2xl ${sizeClasses[size]} w-full max-h-[90vh] overflow-hidden animate-fade-in relative`}
         onClick={(e) => e.stopPropagation()}
       >
         {title && (
-          <div className="px-6 py-4 border-b border-gray-200 bg-sky-50">
-            <h2 className="text-xl font-semibold text-sky-800">{title}</h2>
+          <div className="px-6 py-4 border-b border-white/20 bg-white/10 flex items-center">
+            <h2 className="text-xl font-semibold text-white">{title}</h2>
             <button
               onClick={onClose}
-              className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition-colors"
+              className="absolute top-4 right-4 text-white/60 hover:text-white transition-colors"
             >
               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
