@@ -89,6 +89,13 @@ export interface AnalysisData {
   summary: string;
 }
 
+// API Analysis Response Types
+export interface APIAnalysisResponse {
+  overall_evaluation: string;
+  good_points: string;
+  improvements: string;
+}
+
 // Game Creation Response
 export interface GameCreationResponse {
   gameId: string;

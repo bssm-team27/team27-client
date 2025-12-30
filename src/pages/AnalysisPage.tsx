@@ -1,12 +1,14 @@
 import React, {useEffect, useState, useRef, useMemo} from 'react';
 import { useGameStore } from '../stores/gameStore';
 import { Button, LoadingSpinner } from '../components/ui';
-import type { AnalysisData } from '../types/game';
+import type { AnalysisData, APIAnalysisResponse } from '../types/game';
 import { getRandomBackground } from '../utils/randomBackground';
+import { gameAPI } from '../api/gameAPI';
 
 const AnalysisPage: React.FC = () => {
   const { gameState, getAnalysis, resetGame, setCurrentPage, backgroundImage } = useGameStore();
   const [analysisData, setAnalysisData] = useState<AnalysisData | null>(null);
+  const [apiAnalysis, setApiAnalysis] = useState<APIAnalysisResponse | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const isLoadingRef = useRef(false);
 
@@ -21,7 +23,7 @@ const AnalysisPage: React.FC = () => {
       return;
     }
 
-    if (analysisData || isLoadingRef.current) {
+    if (isLoadingRef.current) {
       return;
     }
 
@@ -30,14 +32,55 @@ const AnalysisPage: React.FC = () => {
 
       isLoadingRef.current = true;
       setIsLoading(true);
-      const data = await getAnalysis();
-      setAnalysisData(data);
-      setIsLoading(false);
-      isLoadingRef.current = false;
+
+      try {
+        // API 분석 호출
+        if (gameState?.phase === 'analysis') {
+          console.log('Calling API analysis for game:', gameState.gameId);
+          const apiResponse = await gameAPI.submitGameData(gameState);
+          console.log('API Response:', apiResponse);
+
+          // API 응답이 성공적이고 데이터가 있는지 확인
+          if (apiResponse.success && apiResponse.data) {
+            console.log('Setting API analysis data from .data:', apiResponse.data);
+            setApiAnalysis(apiResponse.data);
+          }
+          // API 응답이 직접 분석 데이터인 경우 (success/data 래퍼가 없는 경우)
+          else if (apiResponse.overall_evaluation || apiResponse.good_points || apiResponse.improvements) {
+            console.log('Setting API analysis data directly:', apiResponse);
+            setApiAnalysis(apiResponse);
+          }
+          else {
+            console.log('API call failed or no data:', apiResponse);
+          }
+        }
+
+        // Mock 분석 데이터를 기본값으로 생성 (UI 표시용)
+        const mockAnalysisData = {
+          totalScore: gameState?.choices.reduce((sum, choice) => sum + choice.safetyRating, 0) || 0,
+          maxScore: (gameState?.choices.length || 1) * 5,
+          safetyGrade: 'B' as const,
+          strengths: ['적절한 안전 판단을 보였습니다.'],
+          improvements: ['더 신중한 판단이 필요합니다.'],
+          detailedFeedback: [],
+          summary: '게임 결과를 분석 중입니다...'
+        };
+        setAnalysisData(mockAnalysisData);
+      } catch (error) {
+        console.error('분석 로드 실패:', error);
+      } finally {
+        setIsLoading(false);
+        isLoadingRef.current = false;
+      }
     };
 
     loadAnalysis();
-  }, [gameState, analysisData]);
+  }, [gameState]);
+
+  // API 분석 상태 추적용 useEffect
+  useEffect(() => {
+    console.log('API Analysis state updated:', apiAnalysis);
+  }, [apiAnalysis]);
 
   const handleNewGame = () => {
     resetGame();
@@ -178,12 +221,14 @@ const AnalysisPage: React.FC = () => {
                     </svg>
                     분석 요약
                   </h3>
-                  <p className="text-white/80 leading-relaxed">{analysisData.summary}</p>
+                  <p className="text-white/80 leading-relaxed">
+                    {apiAnalysis?.overall_evaluation || analysisData.summary}
+                  </p>
                 </div>
 
                 <div className="grid md:grid-cols-2 gap-6">
                   {/* 강점 */}
-                  {analysisData.strengths.length > 0 && (
+                  {(apiAnalysis?.good_points || analysisData.strengths.length > 0) && (
                       <div className="bg-white/10 border border-white/15 rounded-lg p-6">
                         <h3 className="font-semibold text-white mb-3 flex items-center">
                           <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -191,19 +236,23 @@ const AnalysisPage: React.FC = () => {
                           </svg>
                           강점
                         </h3>
-                        <ul className="space-y-2">
-                          {analysisData.strengths.map((strength, index) => (
-                              <li key={index} className="flex items-start">
-                                <span className="text-white mr-2 mt-1">✓</span>
-                                <span className="text-white/85">{strength}</span>
-                              </li>
-                          ))}
-                        </ul>
+                        {apiAnalysis?.good_points ? (
+                          <p className="text-white/85 leading-relaxed">{apiAnalysis.good_points}</p>
+                        ) : (
+                          <ul className="space-y-2">
+                            {analysisData.strengths.map((strength, index) => (
+                                <li key={index} className="flex items-start">
+                                  <span className="text-white mr-2 mt-1">✓</span>
+                                  <span className="text-white/85">{strength}</span>
+                                </li>
+                            ))}
+                          </ul>
+                        )}
                       </div>
                   )}
 
                   {/* 개선점 */}
-                  {analysisData.improvements.length > 0 && (
+                  {(apiAnalysis?.improvements || analysisData.improvements.length > 0) && (
                       <div className="bg-white/10 border border-white/15 rounded-lg p-6">
                         <h3 className="font-semibold text-white mb-3 flex items-center">
                           <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -211,14 +260,18 @@ const AnalysisPage: React.FC = () => {
                           </svg>
                           개선점
                         </h3>
-                        <ul className="space-y-2">
-                          {analysisData.improvements.map((improvement, index) => (
-                              <li key={index} className="flex items-start">
-                                <span className="text-white mr-2 mt-1">💡</span>
-                                <span className="text-white/85">{improvement}</span>
-                              </li>
-                          ))}
-                        </ul>
+                        {apiAnalysis?.improvements ? (
+                          <p className="text-white/85 leading-relaxed">{apiAnalysis.improvements}</p>
+                        ) : (
+                          <ul className="space-y-2">
+                            {analysisData.improvements.map((improvement, index) => (
+                                <li key={index} className="flex items-start">
+                                  <span className="text-white mr-2 mt-1">💡</span>
+                                  <span className="text-white/85">{improvement}</span>
+                                </li>
+                            ))}
+                          </ul>
+                        )}
                       </div>
                   )}
                 </div>
