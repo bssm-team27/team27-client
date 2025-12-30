@@ -57,8 +57,8 @@ const AnalysisPage: React.FC = () => {
 
         // Mock 분석 데이터를 기본값으로 생성 (UI 표시용)
         const mockAnalysisData = {
-          totalScore: gameState?.choices.reduce((sum, choice) => sum + choice.safetyRating, 0) || 0,
-          maxScore: (gameState?.choices.length || 1) * 5,
+          totalScore: gameState?.choices?.reduce((sum, choice) => sum + choice.safetyRating, 0) || 0,
+          maxScore: (gameState?.choices?.length || 1) * 5,
           safetyGrade: 'B' as const,
           strengths: ['적절한 안전 판단을 보였습니다.'],
           improvements: ['더 신중한 판단이 필요합니다.'],
@@ -110,25 +110,33 @@ const AnalysisPage: React.FC = () => {
 
   const scoreMessage = getScoreMessage(analysisData.totalScore, analysisData.maxScore);
   const percentage = Math.round((analysisData.totalScore / analysisData.maxScore) * 100);
-  // TODO: Replace with API data when available.
-  const choiceScoreSeries = [
-    { label: '선택 1', score: 72 },
-    { label: '선택 2', score: 64 },
-    { label: '선택 3', score: 81 },
-    { label: '선택 4', score: 58 },
-    { label: '선택 5', score: 76 },
-    { label: '선택 6', score: 69 },
-  ];
+
+  // 실제 선택 데이터를 기반으로 점수 추이 계산 (누적 평균 백분율)
+  const choiceScoreSeries = gameState?.choices?.map((choice, index) => {
+    // 현재 선택까지의 누적 평균 계산
+    const cumulativeChoices = gameState.choices.slice(0, index + 1);
+    const cumulativeSum = cumulativeChoices.reduce((sum, c) => sum + c.safetyRating, 0);
+    const cumulativeAverage = cumulativeSum / cumulativeChoices.length;
+    const cumulativePercentage = Math.round((cumulativeAverage / 5) * 100);
+
+    return {
+      label: `선택 ${index + 1}`,
+      score: cumulativePercentage, // 누적 평균을 백분율로 변환
+      choiceText: choice.text && choice.text.length > 20 ? choice.text.substring(0, 20) + '...' : choice.text || `선택 ${index + 1}`
+    };
+  }) || [];
   const chartWidth = 600;
   const chartHeight = 208;
-  const chartPadding = { top: 16, right: 20, bottom: 32, left: 40 };
-  const scoreMax = Math.max(...choiceScoreSeries.map((item) => item.score));
-  const scoreMin = Math.min(...choiceScoreSeries.map((item) => item.score));
-  const scoreRange = Math.max(scoreMax - scoreMin, 1);
-  const yTickCount = 5;
+  const chartPadding = { top: 24, right: 20, bottom: 40, left: 50 };
+
+  // 백분율 기준으로 차트 범위 설정 (0-100%)
+  const scoreMax = 100;
+  const scoreMin = 0;
+  const scoreRange = 100;
+  const yTickCount = 6; // 0%, 20%, 40%, 60%, 80%, 100%
   const yTicks = Array.from({ length: yTickCount }, (_, index) => {
-    const ratio = index / (yTickCount - 1);
-    const value = Math.round(scoreMax - scoreRange * ratio);
+    const value = index * 20; // 0, 20, 40, 60, 80, 100
+    const ratio = (scoreMax - value) / scoreRange;
     return { value, ratio };
   });
   const linePoints = choiceScoreSeries
@@ -308,7 +316,7 @@ const AnalysisPage: React.FC = () => {
                       fontSize="11"
                       fill="rgba(255,255,255,0.6)"
                     >
-                      {tick.value}
+                      {tick.value}%
                     </text>
                   </g>
                 );
@@ -385,12 +393,12 @@ const AnalysisPage: React.FC = () => {
                     <circle cx={x} cy={y} r="3.5" fill="rgba(255,255,255,0.85)" />
                     <text
                       x={x}
-                      y={y - 8}
+                      y={y - 12}
                       textAnchor="middle"
                       fontSize="12"
                       fill="rgba(255,255,255,0.65)"
                     >
-                      {item.score}
+                      {item.score}%
                     </text>
                   </g>
                 );
@@ -418,7 +426,7 @@ const AnalysisPage: React.FC = () => {
           </div>
 
           {/* 게임 통계 */}
-          {gameState && (
+          {gameState?.choices?.length > 0 && (
               <div className="p-8 mt-8 animate-slide-up bg-white/10 border border-white/20 backdrop-blur rounded-xl shadow-2xl" style={{ animationDelay: '400ms' }}>
                 <h2 className="text-xl font-semibold text-white mb-6">게임 통계</h2>
                 <div className="grid md:grid-cols-4 gap-6">
