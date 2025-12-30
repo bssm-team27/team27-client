@@ -166,263 +166,269 @@ const AnalysisPage: React.FC = () => {
         <div className="absolute inset-0 bg-black/40" />
         <div className="max-w-6xl mx-auto relative z-10">
           {/* 헤더 */}
-          <div className="text-center mb-8 animate-fade-in">
+          <div className="text-center mb-12 mt-8 animate-fade-in">
             <h1 className="text-3xl font-bold text-white mb-2">게임 결과 분석</h1>
             <p className="text-white/70">당신의 해양 안전 의식 수준을 분석했습니다</p>
           </div>
 
-          <div className="grid lg:grid-cols-3 gap-8">
-            {/* 종합 점수 */}
-            <div className="lg:col-span-1">
-              <div className="p-8 text-center animate-slide-up bg-white/10 border border-white/20 backdrop-blur rounded-xl shadow-2xl">
-                <h2 className="text-xl font-semibold text-white mb-6">종합 점수</h2>
+          {/* 세로 플렉스 컨테이너 */}
+          <div className="space-y-8">
+            {/* 가로 플렉스 영역: 종합 점수 + 점수 추이 차트 */}
+            <div className="flex flex-col lg:flex-row gap-8">
+              {/* 종합 점수 */}
+              <div className="w-full lg:w-96 lg:max-w-sm min-h-full">
+                <div className="p-8 text-center animate-slide-up bg-white/10 border border-white/20 backdrop-blur rounded-xl shadow-2xl h-full flex flex-col justify-center">
+                  <h2 className="text-xl font-semibold text-white mb-6">종합 점수</h2>
 
-                {/* 점수 원형 차트 */}
-                <div className="relative w-40 h-40 mx-auto mb-6">
-                  <svg className="w-full h-full transform -rotate-90" viewBox="0 0 100 100">
-                    <circle
-                        cx="50"
-                        cy="50"
-                        r="45"
-                        fill="none"
-                        stroke="rgba(255,255,255,0.15)"
-                        strokeWidth="8"
-                    />
-                    <circle
-                        cx="50"
-                        cy="50"
-                        r="45"
-                        fill="none"
-                        stroke="rgba(255,255,255,0.8)"
-                        strokeWidth="8"
-                        strokeDasharray={`${percentage * 2.827} ${(100 - percentage) * 2.827}`}
-                        className="transition-all duration-1000 ease-out"
-                    />
-                  </svg>
-                  <div className="absolute inset-0 flex flex-col items-center justify-center">
-                    <div className="text-3xl font-bold text-white">{percentage}%</div>
-                    <div className="text-sm text-white/70">{analysisData.totalScore}/{analysisData.maxScore}</div>
-                  </div>
-                </div>
-
-                {/* 등급 */}
-                <div className={`inline-flex items-center px-6 py-3 rounded-full text-lg font-bold ${getGradeColor()} mb-4`}>
-                  안전 등급: {analysisData.safetyGrade}
-                </div>
-
-                <p className="font-medium text-white/80">
-                  {scoreMessage.text}
-                </p>
-              </div>
-            </div>
-
-            {/* 상세 분석 */}
-            <div className="lg:col-span-2">
-              <div className="p-8 animate-slide-up bg-white/10 border border-white/20 backdrop-blur rounded-xl shadow-2xl" style={{ animationDelay: '200ms' }}>
-                <h2 className="text-xl font-semibold text-white mb-6">상세 분석</h2>
-
-                {/* 요약 */}
-                <div className="bg-white/10 border border-white/15 rounded-lg p-6 mb-8">
-                  <h3 className="font-semibold text-white mb-2 flex items-center">
-                    <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                  {/* 점수 원형 차트 */}
+                  <div className="relative w-40 h-40 mx-auto mb-6">
+                    <svg className="w-full h-full transform -rotate-90" viewBox="0 0 100 100">
+                      <circle
+                          cx="50"
+                          cy="50"
+                          r="45"
+                          fill="none"
+                          stroke="rgba(255,255,255,0.15)"
+                          strokeWidth="8"
+                      />
+                      <circle
+                          cx="50"
+                          cy="50"
+                          r="45"
+                          fill="none"
+                          stroke="rgba(255,255,255,0.8)"
+                          strokeWidth="8"
+                          strokeDasharray={`${percentage * 2.827} ${(100 - percentage) * 2.827}`}
+                          className="transition-all duration-1000 ease-out"
+                      />
                     </svg>
-                    분석 요약
-                  </h3>
-                  <p className="text-white/80 leading-relaxed">
-                    {apiAnalysis?.overall_evaluation || analysisData.summary}
+                    <div className="absolute inset-0 flex flex-col items-center justify-center">
+                      <div className="text-3xl font-bold text-white">{percentage}%</div>
+                      <div className="text-sm text-white/70">{analysisData.totalScore}/{analysisData.maxScore}</div>
+                    </div>
+                  </div>
+
+                  {/* 등급 */}
+                  <div className={`inline-flex items-center px-6 py-3 rounded-full text-lg font-bold ${getGradeColor()} mb-4`}>
+                    안전 등급: {analysisData.safetyGrade}
+                  </div>
+
+                  <p className="font-medium text-white/80">
+                    {scoreMessage.text}
                   </p>
                 </div>
-
-                <div className="grid md:grid-cols-2 gap-6">
-                  {/* 강점 */}
-                  {(apiAnalysis?.good_points || analysisData.strengths.length > 0) && (
-                      <div className="bg-white/10 border border-white/15 rounded-lg p-6">
-                        <h3 className="font-semibold text-white mb-3 flex items-center">
-                          <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                          </svg>
-                          강점
-                        </h3>
-                        {apiAnalysis?.good_points ? (
-                          <p className="text-white/85 leading-relaxed">{apiAnalysis.good_points}</p>
-                        ) : (
-                          <ul className="space-y-2">
-                            {analysisData.strengths.map((strength, index) => (
-                                <li key={index} className="flex items-start">
-                                  <span className="text-white mr-2 mt-1">✓</span>
-                                  <span className="text-white/85">{strength}</span>
-                                </li>
-                            ))}
-                          </ul>
-                        )}
-                      </div>
-                  )}
-
-                  {/* 개선점 */}
-                  {(apiAnalysis?.improvements || analysisData.improvements.length > 0) && (
-                      <div className="bg-white/10 border border-white/15 rounded-lg p-6">
-                        <h3 className="font-semibold text-white mb-3 flex items-center">
-                          <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-                          </svg>
-                          개선점
-                        </h3>
-                        {apiAnalysis?.improvements ? (
-                          <p className="text-white/85 leading-relaxed">{apiAnalysis.improvements}</p>
-                        ) : (
-                          <ul className="space-y-2">
-                            {analysisData.improvements.map((improvement, index) => (
-                                <li key={index} className="flex items-start">
-                                  <span className="text-white mr-2 mt-1">💡</span>
-                                  <span className="text-white/85">{improvement}</span>
-                                </li>
-                            ))}
-                          </ul>
-                        )}
-                      </div>
-                  )}
-                </div>
               </div>
-            </div>
-          </div>
 
-          {/* 선택지별 점수 그래프 */}
-          <div className="p-8 mt-8 animate-slide-up bg-white/10 border border-white/20 backdrop-blur rounded-xl shadow-2xl" style={{ animationDelay: '350ms' }}>
-            <h2 className="text-xl font-semibold text-white mb-6">선택지별 점수 추이</h2>
-            <svg
-              className="w-full"
-              style={{ aspectRatio: `${chartWidth} / ${chartHeight}` }}
-              viewBox={`0 0 ${chartWidth} ${chartHeight}`}
-            >
-              {yTicks.map((tick) => {
-                const y =
-                  chartPadding.top +
-                  (chartHeight - chartPadding.top - chartPadding.bottom) * tick.ratio;
-                return (
-                  <g key={`y-${tick.value}`}>
+              {/* 선택지별 점수 그래프 */}
+              <div className="flex-1 min-h-full">
+                <div className="p-8 animate-slide-up bg-white/10 border border-white/20 backdrop-blur rounded-xl shadow-2xl h-full flex flex-col" style={{ animationDelay: '200ms' }}>
+                  <h2 className="text-xl font-semibold text-white mb-6">선택지별 점수 추이</h2>
+                  <div className="flex-1 flex items-center">
+                    <svg
+                      className="w-full"
+                      style={{ aspectRatio: `${chartWidth} / ${chartHeight}` }}
+                      viewBox={`0 0 ${chartWidth} ${chartHeight}`}
+                    >
+                    {yTicks.map((tick) => {
+                      const y =
+                        chartPadding.top +
+                        (chartHeight - chartPadding.top - chartPadding.bottom) * tick.ratio;
+                      return (
+                        <g key={`y-${tick.value}`}>
+                          <line
+                            x1={chartPadding.left}
+                            y1={y}
+                            x2={chartWidth - chartPadding.right}
+                            y2={y}
+                            stroke="rgba(255,255,255,0.15)"
+                            strokeWidth="1"
+                          />
+                          <text
+                            x={chartPadding.left - 8}
+                            y={y + 4}
+                            textAnchor="end"
+                            fontSize="11"
+                            fill="rgba(255,255,255,0.6)"
+                          >
+                            {tick.value}%
+                          </text>
+                        </g>
+                      );
+                    })}
+                    {choiceScoreSeries.map((item, index) => {
+                      const x =
+                        chartPadding.left +
+                        ((chartWidth - chartPadding.left - chartPadding.right) *
+                          (choiceScoreSeries.length === 1 ? 0 : index)) /
+                          Math.max(choiceScoreSeries.length - 1, 1);
+                      return (
+                        <g key={`x-${item.label}`}>
+                          <line
+                            x1={x}
+                            y1={chartPadding.top}
+                            x2={x}
+                            y2={chartHeight - chartPadding.bottom}
+                            stroke="rgba(255,255,255,0.08)"
+                            strokeWidth="1"
+                          />
+                          <text
+                            x={x}
+                            y={chartHeight - chartPadding.bottom + 16}
+                            textAnchor="middle"
+                            fontSize="11"
+                            fill="rgba(255,255,255,0.6)"
+                          >
+                            {item.label}
+                          </text>
+                        </g>
+                      );
+                    })}
                     <line
                       x1={chartPadding.left}
-                      y1={y}
+                      y1={chartHeight - chartPadding.bottom}
                       x2={chartWidth - chartPadding.right}
-                      y2={y}
-                      stroke="rgba(255,255,255,0.15)"
-                      strokeWidth="1"
-                    />
-                    <text
-                      x={chartPadding.left - 8}
-                      y={y + 4}
-                      textAnchor="end"
-                      fontSize="11"
-                      fill="rgba(255,255,255,0.6)"
-                    >
-                      {tick.value}%
-                    </text>
-                  </g>
-                );
-              })}
-              {choiceScoreSeries.map((item, index) => {
-                const x =
-                  chartPadding.left +
-                  ((chartWidth - chartPadding.left - chartPadding.right) *
-                    (choiceScoreSeries.length === 1 ? 0 : index)) /
-                    Math.max(choiceScoreSeries.length - 1, 1);
-                return (
-                  <g key={`x-${item.label}`}>
-                    <line
-                      x1={x}
-                      y1={chartPadding.top}
-                      x2={x}
                       y2={chartHeight - chartPadding.bottom}
-                      stroke="rgba(255,255,255,0.08)"
+                      stroke="rgba(255,255,255,0.25)"
                       strokeWidth="1"
                     />
+                    <line
+                      x1={chartPadding.left}
+                      y1={chartPadding.top}
+                      x2={chartPadding.left}
+                      y2={chartHeight - chartPadding.bottom}
+                      stroke="rgba(255,255,255,0.25)"
+                      strokeWidth="1"
+                    />
+                    <path
+                      d={areaPath}
+                      fill="rgba(255,255,255,0.08)"
+                      stroke="none"
+                    />
+                    <polyline
+                      points={linePoints}
+                      fill="none"
+                      stroke="rgba(255,255,255,0.7)"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                    {choiceScoreSeries.map((item, index) => {
+                      const x =
+                        chartPadding.left +
+                        ((chartWidth - chartPadding.left - chartPadding.right) *
+                          (choiceScoreSeries.length === 1 ? 0 : index)) /
+                          Math.max(choiceScoreSeries.length - 1, 1);
+                      const y =
+                        chartPadding.top +
+                        (chartHeight - chartPadding.top - chartPadding.bottom) *
+                          (1 - (item.score - scoreMin) / scoreRange);
+                      return (
+                        <g key={item.label}>
+                          <circle cx={x} cy={y} r="3.5" fill="rgba(255,255,255,0.85)" />
+                          <text
+                            x={x}
+                            y={y - 12}
+                            textAnchor="middle"
+                            fontSize="12"
+                            fill="rgba(255,255,255,0.65)"
+                          >
+                            {item.score}%
+                          </text>
+                        </g>
+                      );
+                    })}
                     <text
-                      x={x}
-                      y={chartHeight - chartPadding.bottom + 16}
-                      textAnchor="middle"
-                      fontSize="11"
-                      fill="rgba(255,255,255,0.6)"
-                    >
-                      {item.label}
-                    </text>
-                  </g>
-                );
-              })}
-              <line
-                x1={chartPadding.left}
-                y1={chartHeight - chartPadding.bottom}
-                x2={chartWidth - chartPadding.right}
-                y2={chartHeight - chartPadding.bottom}
-                stroke="rgba(255,255,255,0.25)"
-                strokeWidth="1"
-              />
-              <line
-                x1={chartPadding.left}
-                y1={chartPadding.top}
-                x2={chartPadding.left}
-                y2={chartHeight - chartPadding.bottom}
-                stroke="rgba(255,255,255,0.25)"
-                strokeWidth="1"
-              />
-              <path
-                d={areaPath}
-                fill="rgba(255,255,255,0.08)"
-                stroke="none"
-              />
-              <polyline
-                points={linePoints}
-                fill="none"
-                stroke="rgba(255,255,255,0.7)"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-              {choiceScoreSeries.map((item, index) => {
-                const x =
-                  chartPadding.left +
-                  ((chartWidth - chartPadding.left - chartPadding.right) *
-                    (choiceScoreSeries.length === 1 ? 0 : index)) /
-                    Math.max(choiceScoreSeries.length - 1, 1);
-                const y =
-                  chartPadding.top +
-                  (chartHeight - chartPadding.top - chartPadding.bottom) *
-                    (1 - (item.score - scoreMin) / scoreRange);
-                return (
-                  <g key={item.label}>
-                    <circle cx={x} cy={y} r="3.5" fill="rgba(255,255,255,0.85)" />
-                    <text
-                      x={x}
-                      y={y - 12}
+                      x={chartWidth / 2}
+                      y={chartHeight - 6}
                       textAnchor="middle"
                       fontSize="12"
                       fill="rgba(255,255,255,0.65)"
                     >
-                      {item.score}%
+                      선택지
                     </text>
-                  </g>
-                );
-              })}
-              <text
-                x={chartWidth / 2}
-                y={chartHeight - 6}
-                textAnchor="middle"
-                fontSize="12"
-                fill="rgba(255,255,255,0.65)"
-              >
-                선택지
-              </text>
-              <text
-                x={12}
-                y={chartHeight / 2}
-                textAnchor="middle"
-                fontSize="12"
-                fill="rgba(255,255,255,0.65)"
-                transform={`rotate(-90 12 ${chartHeight / 2})`}
-              >
-                점수
-              </text>
-            </svg>
+                    <text
+                      x={12}
+                      y={chartHeight / 2}
+                      textAnchor="middle"
+                      fontSize="12"
+                      fill="rgba(255,255,255,0.65)"
+                      transform={`rotate(-90 12 ${chartHeight / 2})`}
+                    >
+                      점수
+                    </text>
+                    </svg>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* 상세 분석 */}
+            <div className="animate-slide-up bg-white/10 border border-white/20 backdrop-blur rounded-xl shadow-2xl p-8" style={{ animationDelay: '300ms' }}>
+              <h2 className="text-xl font-semibold text-white mb-6">상세 분석</h2>
+
+              {/* 요약 */}
+              <div className="bg-white/10 border border-white/15 rounded-lg p-6 mb-8">
+                <h3 className="font-semibold text-white mb-2 flex items-center">
+                  <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                  </svg>
+                  분석 요약
+                </h3>
+                <p className="text-white/80 leading-relaxed">
+                  {apiAnalysis?.overall_evaluation || analysisData.summary}
+                </p>
+              </div>
+
+              <div className="grid md:grid-cols-2 gap-6">
+                {/* 강점 */}
+                {(apiAnalysis?.good_points || analysisData.strengths.length > 0) && (
+                    <div className="bg-white/10 border border-white/15 rounded-lg p-6">
+                      <h3 className="font-semibold text-white mb-3 flex items-center">
+                        <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        강점
+                      </h3>
+                      {apiAnalysis?.good_points ? (
+                        <p className="text-white/85 leading-relaxed">{apiAnalysis.good_points}</p>
+                      ) : (
+                        <ul className="space-y-2">
+                          {analysisData.strengths.map((strength, index) => (
+                              <li key={index} className="flex items-start">
+                                <span className="text-white mr-2 mt-1">✓</span>
+                                <span className="text-white/85">{strength}</span>
+                              </li>
+                          ))}
+                        </ul>
+                      )}
+                    </div>
+                )}
+
+                {/* 개선점 */}
+                {(apiAnalysis?.improvements || analysisData.improvements.length > 0) && (
+                    <div className="bg-white/10 border border-white/15 rounded-lg p-6">
+                      <h3 className="font-semibold text-white mb-3 flex items-center">
+                        <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                        </svg>
+                        개선점
+                      </h3>
+                      {apiAnalysis?.improvements ? (
+                        <p className="text-white/85 leading-relaxed">{apiAnalysis.improvements}</p>
+                      ) : (
+                        <ul className="space-y-2">
+                          {analysisData.improvements.map((improvement, index) => (
+                              <li key={index} className="flex items-start">
+                                <span className="text-white mr-2 mt-1">💡</span>
+                                <span className="text-white/85">{improvement}</span>
+                              </li>
+                          ))}
+                        </ul>
+                      )}
+                    </div>
+                )}
+              </div>
+            </div>
           </div>
 
           {/* 게임 통계 */}
