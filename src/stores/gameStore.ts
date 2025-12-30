@@ -163,7 +163,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
         } : null
       }));
 
-      const response = await gameAPI.getAnalysis();
+      const response = await gameAPI.getAnalysis(gameState.gameId);
 
       if (response.success && response.data) {
         set((state) => ({
