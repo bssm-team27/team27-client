@@ -81,7 +81,7 @@ const GameSetupPage: React.FC = () => {
         <div className="text-center mb-8 animate-fade-in">
           <button
             onClick={handleBack}
-            className="inline-flex items-center text-gray-600 hover:text-white mb-4 transition-colors"
+            className="inline-flex items-center text-white/50 hover:text-white mb-4 transition-colors"
           >
             <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
@@ -94,10 +94,10 @@ const GameSetupPage: React.FC = () => {
 
         <div className="grid lg:grid-cols-2 gap-8">
           {/* 참가자 수 선택 */}
-          <div className="card p-8 animate-slide-up">
+          <div className="card p-8 animate-slide-up bg-white/10 backdrop-blur border border-white/30">
             <h2 className="text-xl font-semibold text-gray-800 mb-6 flex items-center">
-              <div className="w-8 h-8 bg-sky-100 rounded-full flex items-center justify-center mr-3">
-                <span className="text-sky-600 font-bold">1</span>
+              <div className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center mr-3">
+                <span className="text-white/50 font-bold">1</span>
               </div>
               참가자 수
             </h2>
@@ -106,10 +106,10 @@ const GameSetupPage: React.FC = () => {
                 <label
                   key={option.value}
                   className={`
-                    flex items-center p-4 rounded-lg border-2 cursor-pointer transition-all duration-200
+                    flex items-center p-4 rounded-lg border-2 cursor-pointer transition-all duration-200 backdrop-blur
                     ${participants === option.value
-                      ? 'border-sky-500 bg-sky-50 shadow-md'
-                      : 'border-gray-200 hover:border-sky-300 hover:bg-gray-50'
+                      ? 'bg-white text-gray-900 border-white shadow-lg'
+                      : 'bg-white/15 text-white border-white/40 hover:border-white hover:bg-white/25'
                     }
                   `}
                 >
@@ -123,11 +123,15 @@ const GameSetupPage: React.FC = () => {
                   />
                   <div className="text-2xl mr-4">{option.icon}</div>
                   <div className="flex-1">
-                    <div className="font-medium text-gray-800">{option.label}</div>
-                    <div className="text-sm text-gray-600">{option.description}</div>
+                    <div className={`font-medium ${participants === option.value ? 'text-gray-900' : 'text-white'}`}>
+                      {option.label}
+                    </div>
+                    <div className={`text-sm ${participants === option.value ? 'text-gray-600' : 'text-gray-200'}`}>
+                      {option.description}
+                    </div>
                   </div>
                   {participants === option.value && (
-                    <div className="text-sky-600">
+                    <div className="text-gray-900">
                       <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
                         <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                       </svg>
@@ -139,10 +143,10 @@ const GameSetupPage: React.FC = () => {
           </div>
 
           {/* 활동 선택 */}
-          <div className="card p-8 animate-slide-up" style={{ animationDelay: '200ms' }}>
+          <div className="card p-8 animate-slide-up bg-white/10 backdrop-blur border border-white/30" style={{ animationDelay: '200ms' }}>
             <h2 className="text-xl font-semibold text-gray-800 mb-6 flex items-center">
-              <div className="w-8 h-8 bg-sky-100 rounded-full flex items-center justify-center mr-3">
-                <span className="text-sky-600 font-bold">2</span>
+              <div className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center mr-3">
+                <span className="text-white/50 font-bold">2</span>
               </div>
               활동 종류
             </h2>
@@ -151,10 +155,10 @@ const GameSetupPage: React.FC = () => {
                 <label
                   key={option.value}
                   className={`
-                    flex items-center p-6 rounded-xl border-2 cursor-pointer transition-all duration-200 transform
+                    flex items-center p-6 rounded-xl border-2 cursor-pointer transition-all duration-200 transform backdrop-blur
                     ${activity === option.value
-                      ? 'border-sky-500 bg-sky-50 shadow-lg scale-105'
-                      : `border-gray-200 hover:border-sky-300 hover:shadow-md ${option.bgColor}`
+                      ? 'bg-white text-gray-900 border-white shadow-lg scale-105'
+                      : 'bg-white/15 text-white border-white/35 hover:border-white hover:bg-white/25'
                     }
                   `}
                 >
@@ -168,11 +172,15 @@ const GameSetupPage: React.FC = () => {
                   />
                   <div className="text-3xl mr-4">{option.icon}</div>
                   <div className="flex-1">
-                    <div className="font-semibold text-gray-800 text-lg">{option.label}</div>
-                    <div className="text-gray-600">{option.description}</div>
+                    <div className={`font-semibold text-lg ${activity === option.value ? 'text-gray-900' : 'text-white'}`}>
+                      {option.label}
+                    </div>
+                    <div className={`${activity === option.value ? 'text-gray-600' : 'text-gray-200'}`}>
+                      {option.description}
+                    </div>
                   </div>
                   {activity === option.value && (
-                    <div className="text-sky-600">
+                    <div className="text-gray-900">
                       <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
                         <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                       </svg>
