@@ -50,8 +50,9 @@ const GameplayPage: React.FC = () => {
 
   if (!gameState || !currentScenario) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-sky-300 to-sky-500 flex items-center justify-center">
-        <div className="card p-8 text-center">
+      <div className="relative min-h-screen bg-black text-white flex items-center justify-center p-4">
+        <div className="absolute inset-0 bg-gradient-to-b from-white/10 via-white/5 to-black" />
+        <div className="card p-8 text-center bg-white/10 backdrop-blur border border-white/30 relative z-10 text-white">
           <LoadingSpinner size="lg" message="게임을 불러오는 중..." />
         </div>
       </div>
@@ -72,7 +73,7 @@ const GameplayPage: React.FC = () => {
 
       {/* 게임 진행 상태 표시 */}
       <div className="absolute top-6 left-6 z-20">
-        <div className="bg-black/50 backdrop-blur-sm rounded-lg px-4 py-2 text-white">
+        <div className="bg-white/10 border border-white/30 backdrop-blur rounded-lg px-4 py-2 text-white">
           <div className="flex items-center space-x-4">
             <div className="flex items-center">
               <svg className="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
@@ -94,7 +95,7 @@ const GameplayPage: React.FC = () => {
 
       {/* 설정 정보 */}
       <div className="absolute top-6 right-6 z-20">
-        <div className="bg-black/50 backdrop-blur-sm rounded-lg px-4 py-2 text-white text-sm">
+        <div className="bg-white/10 border border-white/30 backdrop-blur rounded-lg px-4 py-2 text-white text-sm">
           {gameState.setup.participants === 'single' && '🧑‍🦲 혼자'}
           {gameState.setup.participants === 'double' && '👫 둘이서'}
           {gameState.setup.participants === 'group' && '👥 단체로'}
@@ -107,7 +108,7 @@ const GameplayPage: React.FC = () => {
 
       {/* 상황 정보 */}
       <div className="absolute bottom-6 left-6 z-20">
-        <div className="bg-black/50 backdrop-blur-sm rounded-lg px-4 py-2 text-white text-sm">
+        <div className="bg-white/10 border border-white/30 backdrop-blur rounded-lg px-4 py-2 text-white text-sm">
           <div className="flex items-center">
             <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -137,8 +138,8 @@ const GameplayPage: React.FC = () => {
 
       {/* 로딩 상태 */}
       {isLoading && (
-        <div className="absolute inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-30">
-          <div className="card p-8 text-center">
+        <div className="absolute inset-0 bg-black/60 backdrop-blur flex items-center justify-center z-30">
+          <div className="card p-8 text-center bg-white/10 border border-white/30 backdrop-blur text-white">
             <LoadingSpinner size="lg" message="다음 시나리오를 준비하고 있습니다..." />
           </div>
         </div>
@@ -147,7 +148,7 @@ const GameplayPage: React.FC = () => {
       {/* 도움말 */}
       {!showChoices && !isLoading && (
         <div className="absolute bottom-6 right-6 z-20 animate-pulse">
-          <div className="bg-black/50 backdrop-blur-sm rounded-lg px-3 py-2 text-white text-xs">
+          <div className="bg-white/10 border border-white/30 backdrop-blur rounded-lg px-3 py-2 text-white text-xs">
             💡 화면을 클릭하여 계속하기
           </div>
         </div>

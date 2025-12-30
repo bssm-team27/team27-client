@@ -59,28 +59,28 @@ const ScenarioDescription: React.FC<ScenarioDescriptionProps> = ({
 
   return (
     <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full max-w-4xl px-6 animate-fade-in">
-      <div className="bg-white/95 backdrop-blur-sm rounded-xl p-8 shadow-2xl border border-white/20">
-        <h2 className="text-3xl font-bold text-sky-800 mb-6 text-center">
+      <div className="bg-white/12 backdrop-blur rounded-xl p-8 shadow-2xl border border-white/25">
+        <h2 className="text-3xl font-bold text-white mb-6 text-center">
           {displayedTitle}
           {displayedTitle.length < title.length && (
-            <span className="animate-pulse">|</span>
+            <span className="animate-pulse text-white/70">|</span>
           )}
         </h2>
-        <p className="text-lg text-gray-700 leading-relaxed text-center">
+        <p className="text-lg text-gray-200 leading-relaxed text-center">
           {displayedDescription}
           {titleComplete && displayedDescription.length < description.length && (
-            <span className="animate-pulse">|</span>
+            <span className="animate-pulse text-white/60">|</span>
           )}
         </p>
 
         {/* 클릭하여 계속하기 안내 */}
         {titleComplete && displayedDescription.length === description.length && (
           <div className="mt-6 text-center animate-fade-in">
-            <p className="text-sm text-sky-600 animate-pulse">
+            <p className="text-sm text-white/70 animate-pulse">
               화면을 클릭하여 선택지를 확인하세요
             </p>
             <div className="mt-2">
-              <svg className="w-6 h-6 mx-auto text-sky-600 animate-bounce" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-6 h-6 mx-auto text-white animate-bounce" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
               </svg>
             </div>
