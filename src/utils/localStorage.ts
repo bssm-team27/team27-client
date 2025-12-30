@@ -21,6 +21,10 @@ export const gameLocalStorage = {
 
       games[gameState.gameId] = {
         ...gameState,
+        scenarios: gameState.scenarios.map(scenario => ({
+          ...scenario,
+          backgroundImageUrl: '' // 배경 이미지 URL 제거
+        })),
         lastSaved: new Date().toISOString()
       };
 
