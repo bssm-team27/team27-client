@@ -6,7 +6,7 @@ import { getRandomBackground } from '../utils/randomBackground';
 import { gameAPI } from '../api/gameAPI';
 
 const AnalysisPage: React.FC = () => {
-  const { gameState, getAnalysis, resetGame, setCurrentPage, backgroundImage } = useGameStore();
+  const { gameState, getAnalysis, resetGame, setCurrentPage, backgroundImage, saveAnalysisResult } = useGameStore();
   const [analysisData, setAnalysisData] = useState<AnalysisData | null>(null);
   const [apiAnalysis, setApiAnalysis] = useState<APIAnalysisResponse | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -63,7 +63,8 @@ const AnalysisPage: React.FC = () => {
           strengths: ['적절한 안전 판단을 보였습니다.'],
           improvements: ['더 신중한 판단이 필요합니다.'],
           detailedFeedback: [],
-          summary: '게임 결과를 분석 중입니다...'
+          summary: '게임 결과를 분석 중입니다...',
+          apiAnalysis: apiAnalysis || undefined
         };
         setAnalysisData(mockAnalysisData);
       } catch (error) {
@@ -80,7 +81,18 @@ const AnalysisPage: React.FC = () => {
   // API 분석 상태 추적용 useEffect
   useEffect(() => {
     console.log('API Analysis state updated:', apiAnalysis);
-  }, [apiAnalysis]);
+
+    // API 분석 결과가 있고 게임 상태가 있으면 로컬스토리지에 저장
+    if (apiAnalysis && gameState?.gameId && analysisData) {
+      const finalAnalysisData = {
+        ...analysisData,
+        apiAnalysis: apiAnalysis
+      };
+
+      saveAnalysisResult(gameState.gameId, finalAnalysisData);
+      console.log('분석 결과를 로컬스토리지에 저장했습니다:', gameState.gameId);
+    }
+  }, [apiAnalysis, gameState, analysisData, saveAnalysisResult]);
 
   const handleNewGame = () => {
     resetGame();

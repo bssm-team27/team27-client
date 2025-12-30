@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import type {GameStore, GameSetup, PageType, AnalysisData} from '../types/game';
+import type {GameStore, GameSetup, PageType, AnalysisData, APIAnalysisResponse} from '../types/game';
 import { gameAPI } from '../api/gameAPI';
 import { getRandomBackground } from '../utils/randomBackground';
 import { gameLocalStorage } from '../utils/localStorage';
@@ -310,6 +310,25 @@ export const useGameStore = create<GameStore>((set, get) => ({
     } catch (error) {
       console.error('마지막 활성 게임 로드 실패:', error);
       return false;
+    }
+  },
+
+  // 분석 결과 저장
+  saveAnalysisResult: (gameId: string, analysisData: AnalysisData) => {
+    try {
+      gameLocalStorage.saveAnalysisResult(gameId, analysisData);
+    } catch (error) {
+      console.error('분석 결과 저장 실패:', error);
+    }
+  },
+
+  // 저장된 분석 결과 불러오기
+  getAnalysisResult: (gameId: string): AnalysisData | null => {
+    try {
+      return gameLocalStorage.getAnalysisResult(gameId);
+    } catch (error) {
+      console.error('분석 결과 불러오기 실패:', error);
+      return null;
     }
   }
 }));

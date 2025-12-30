@@ -1,8 +1,9 @@
-import type { GameState } from '../types/game';
+import type { GameState, AnalysisData } from '../types/game';
 
 const STORAGE_KEYS = {
   GAME_STATES: 'marine-safety-sim-games',
-  ACTIVE_GAME_ID: 'marine-safety-sim-active-game'
+  ACTIVE_GAME_ID: 'marine-safety-sim-active-game',
+  ANALYSIS_RESULTS: 'marine-safety-sim-analysis-results'
 } as const;
 
 export interface StoredGameState extends GameState {
@@ -11,6 +12,10 @@ export interface StoredGameState extends GameState {
 
 export interface GameStorage {
   [gameId: string]: StoredGameState;
+}
+
+export interface AnalysisStorage {
+  [gameId: string]: AnalysisData;
 }
 
 export const gameLocalStorage = {
@@ -73,6 +78,9 @@ export const gameLocalStorage = {
 
       localStorage.setItem(STORAGE_KEYS.GAME_STATES, JSON.stringify(games));
 
+      // 관련된 분석 결과도 함께 삭제
+      gameLocalStorage.deleteAnalysisResult(gameId);
+
       const activeGameId = localStorage.getItem(STORAGE_KEYS.ACTIVE_GAME_ID);
       if (activeGameId === gameId) {
         localStorage.removeItem(STORAGE_KEYS.ACTIVE_GAME_ID);
@@ -115,5 +123,59 @@ export const gameLocalStorage = {
       scenarioCount: gameState.scenarios.length,
       choiceCount: gameState.choices.length
     }));
+  },
+
+  // 분석 결과 저장
+  saveAnalysisResult: (gameId: string, analysisData: AnalysisData): void => {
+    try {
+      const storedData = localStorage.getItem(STORAGE_KEYS.ANALYSIS_RESULTS);
+      const analyses: AnalysisStorage = storedData ? JSON.parse(storedData) : {};
+
+      analyses[gameId] = analysisData;
+
+      localStorage.setItem(STORAGE_KEYS.ANALYSIS_RESULTS, JSON.stringify(analyses));
+    } catch (error) {
+      console.error('분석 결과 저장 중 오류:', error);
+    }
+  },
+
+  // 분석 결과 불러오기
+  getAnalysisResult: (gameId: string): AnalysisData | null => {
+    try {
+      const storedData = localStorage.getItem(STORAGE_KEYS.ANALYSIS_RESULTS);
+      if (!storedData) return null;
+
+      const analyses: AnalysisStorage = JSON.parse(storedData);
+      return analyses[gameId] || null;
+    } catch (error) {
+      console.error('분석 결과 불러오기 중 오류:', error);
+      return null;
+    }
+  },
+
+  // 분석 결과 삭제
+  deleteAnalysisResult: (gameId: string): void => {
+    try {
+      const storedData = localStorage.getItem(STORAGE_KEYS.ANALYSIS_RESULTS);
+      if (!storedData) return;
+
+      const analyses: AnalysisStorage = JSON.parse(storedData);
+      delete analyses[gameId];
+
+      localStorage.setItem(STORAGE_KEYS.ANALYSIS_RESULTS, JSON.stringify(analyses));
+    } catch (error) {
+      console.error('분석 결과 삭제 중 오류:', error);
+    }
+  },
+
+  // 모든 분석 결과 가져오기
+  getAllAnalysisResults: (): AnalysisStorage => {
+    try {
+      const storedData = localStorage.getItem(STORAGE_KEYS.ANALYSIS_RESULTS);
+      return storedData ? JSON.parse(storedData) : {};
+    } catch (error) {
+      console.error('분석 결과 목록 로드 중 오류:', error);
+      return {};
+    }
   }
 };
