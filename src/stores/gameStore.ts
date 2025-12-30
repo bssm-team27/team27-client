@@ -1,13 +1,14 @@
 import { create } from 'zustand';
 import type {GameStore, GameSetup, PageType, AnalysisData} from '../types/game';
 import { gameAPI } from '../api/gameAPI';
+import { getRandomBackground } from '../utils/randomBackground';
 
 export const useGameStore = create<GameStore>((set, get) => ({
   // State
   gameState: null,
   currentPage: 'main',
   error: null,
-  backgroundImage: null,
+  backgroundImage: getRandomBackground(),
 
   // Actions
   setCurrentPage: (page: PageType) => {
@@ -202,7 +203,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
       gameState: null,
       currentPage: 'main',
       error: null,
-      backgroundImage: null
+      backgroundImage: getRandomBackground()
     });
   }
 }));

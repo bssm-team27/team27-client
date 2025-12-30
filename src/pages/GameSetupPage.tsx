@@ -1,25 +1,19 @@
-import React, {useEffect, useMemo, useState} from 'react';
+import React, {useMemo, useState} from 'react';
 import { useGameStore } from '../stores/gameStore';
 import { Button, LoadingSpinner } from '../components/ui';
 import type { ParticipantType, ActivityType } from '../types/game';
 import { getRandomBackground } from '../utils/randomBackground';
 
 const GameSetupPage: React.FC = () => {
-  const { gameState, createGame, setCurrentPage, backgroundImage, setBackgroundImage } = useGameStore();
+  const { gameState, createGame, setCurrentPage, backgroundImage } = useGameStore();
   const [participants, setParticipants] = useState<ParticipantType>('single');
   const [activity, setActivity] = useState<ActivityType>('swimming');
   const isLoading = gameState?.isLoading && gameState?.loadingType === 'game-creating';
 
   const selectedBackground = useMemo(
-      () => backgroundImage ?? getRandomBackground(),
-      [backgroundImage]
+    () => backgroundImage ?? getRandomBackground(),
+    [backgroundImage]
   );
-
-  useEffect(() => {
-    if (!backgroundImage) {
-      setBackgroundImage(selectedBackground);
-    }
-  }, [backgroundImage, selectedBackground, setBackgroundImage]);
 
   const handleBack = () => {
     setCurrentPage('main');
