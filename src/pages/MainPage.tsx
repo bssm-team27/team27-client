@@ -2,7 +2,7 @@ import React, { useMemo } from 'react';
 import { useGameStore } from '../stores/gameStore';
 import { getRandomBackground } from '../utils/randomBackground';
 import Arrow from "../assets/arrow.svg"
-import MainBar from '../components/main_bar';
+import MainBar from '../components/ui/main_bar.tsx';
 
 const MainPage: React.FC = () => {
   const setCurrentPage = useGameStore(state => state.setCurrentPage);
