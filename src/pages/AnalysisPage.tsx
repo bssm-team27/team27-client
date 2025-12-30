@@ -59,8 +59,9 @@ const AnalysisPage: React.FC = () => {
 
   if (isLoading || !analysisData) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-sky-100 to-sky-200 flex items-center justify-center">
-        <div className="card p-12 text-center max-w-md">
+      <div className="relative min-h-screen flex items-center justify-center p-4 bg-gradient-to-b from-gray-800 via-gray-900 to-black">
+        <div className="absolute inset-0 bg-white/5" />
+        <div className="relative z-10 max-w-md w-full bg-white/12 border border-white/25 backdrop-blur rounded-xl p-12 text-center text-white shadow-2xl">
           <LoadingSpinner size="lg" message="게임 결과를 분석하고 있습니다..." />
         </div>
       </div>

@@ -61,8 +61,8 @@ const GameSetupPage: React.FC = () => {
         className="relative min-h-screen bg-cover bg-center flex items-center justify-center p-4"
         style={{ backgroundImage: `url(${selectedBackground})` }}
       >
-        <div className="absolute inset-0 bg-black/30" />
-        <div className="card p-12 text-center max-w-md relative z-10">
+        <div className="absolute inset-0 bg-black/40" />
+        <div className="relative z-10 max-w-md w-full bg-white/12 border border-white/30 backdrop-blur rounded-xl p-12 text-center text-white shadow-2xl">
           <LoadingSpinner size="lg" message="AI가 맞춤형 시나리오를 생성하고 있습니다..." />
         </div>
       </div>
