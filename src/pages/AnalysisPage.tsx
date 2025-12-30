@@ -67,6 +67,45 @@ const AnalysisPage: React.FC = () => {
 
   const scoreMessage = getScoreMessage(analysisData.totalScore, analysisData.maxScore);
   const percentage = Math.round((analysisData.totalScore / analysisData.maxScore) * 100);
+  // TODO: Replace with API data when available.
+  const choiceScoreSeries = [
+    { label: '선택 1', score: 72 },
+    { label: '선택 2', score: 64 },
+    { label: '선택 3', score: 81 },
+    { label: '선택 4', score: 58 },
+    { label: '선택 5', score: 76 },
+    { label: '선택 6', score: 69 },
+  ];
+  const chartWidth = 600;
+  const chartHeight = 180;
+  const chartPadding = { top: 16, right: 20, bottom: 32, left: 40 };
+  const scoreMax = Math.max(...choiceScoreSeries.map((item) => item.score));
+  const scoreMin = Math.min(...choiceScoreSeries.map((item) => item.score));
+  const scoreRange = Math.max(scoreMax - scoreMin, 1);
+  const yTickCount = 5;
+  const yTicks = Array.from({ length: yTickCount }, (_, index) => {
+    const ratio = index / (yTickCount - 1);
+    const value = Math.round(scoreMax - scoreRange * ratio);
+    return { value, ratio };
+  });
+  const linePoints = choiceScoreSeries
+    .map((item, index) => {
+      const x =
+        chartPadding.left +
+        ((chartWidth - chartPadding.left - chartPadding.right) *
+          (choiceScoreSeries.length === 1 ? 0 : index)) /
+          Math.max(choiceScoreSeries.length - 1, 1);
+      const y =
+        chartPadding.top +
+        (chartHeight - chartPadding.top - chartPadding.bottom) *
+          (1 - (item.score - scoreMin) / scoreRange);
+      return `${x},${y}`;
+    })
+    .join(' ');
+  const areaPath = `M ${chartPadding.left},${chartHeight - chartPadding.bottom} L ${linePoints.replace(
+    /,/g,
+    ' '
+  )} L ${chartWidth - chartPadding.right},${chartHeight - chartPadding.bottom} Z`;
 
   return (
     <div
@@ -184,6 +223,142 @@ const AnalysisPage: React.FC = () => {
                   )}
                 </div>
               </div>
+            </div>
+          </div>
+
+          {/* 선택지별 점수 그래프 */}
+          <div className="p-8 mt-8 animate-slide-up bg-white/10 border border-white/20 backdrop-blur rounded-xl shadow-2xl" style={{ animationDelay: '350ms' }}>
+            <h2 className="text-xl font-semibold text-white mb-6">선택지별 점수 추이</h2>
+            <div className="bg-black/20 border border-white/10 rounded-lg p-4">
+              <svg className="w-full h-44" viewBox={`0 0 ${chartWidth} ${chartHeight}`} preserveAspectRatio="none">
+                {yTicks.map((tick) => {
+                  const y =
+                    chartPadding.top +
+                    (chartHeight - chartPadding.top - chartPadding.bottom) * tick.ratio;
+                  return (
+                    <g key={`y-${tick.value}`}>
+                      <line
+                        x1={chartPadding.left}
+                        y1={y}
+                        x2={chartWidth - chartPadding.right}
+                        y2={y}
+                        stroke="rgba(255,255,255,0.15)"
+                        strokeWidth="1"
+                      />
+                      <text
+                        x={chartPadding.left - 8}
+                        y={y + 4}
+                        textAnchor="end"
+                        fontSize="11"
+                        fill="rgba(255,255,255,0.6)"
+                      >
+                        {tick.value}
+                      </text>
+                    </g>
+                  );
+                })}
+                {choiceScoreSeries.map((item, index) => {
+                  const x =
+                    chartPadding.left +
+                    ((chartWidth - chartPadding.left - chartPadding.right) *
+                      (choiceScoreSeries.length === 1 ? 0 : index)) /
+                      Math.max(choiceScoreSeries.length - 1, 1);
+                  return (
+                    <g key={`x-${item.label}`}>
+                      <line
+                        x1={x}
+                        y1={chartPadding.top}
+                        x2={x}
+                        y2={chartHeight - chartPadding.bottom}
+                        stroke="rgba(255,255,255,0.08)"
+                        strokeWidth="1"
+                      />
+                      <text
+                        x={x}
+                        y={chartHeight - chartPadding.bottom + 16}
+                        textAnchor="middle"
+                        fontSize="11"
+                        fill="rgba(255,255,255,0.6)"
+                      >
+                        {item.label}
+                      </text>
+                    </g>
+                  );
+                })}
+                <line
+                  x1={chartPadding.left}
+                  y1={chartHeight - chartPadding.bottom}
+                  x2={chartWidth - chartPadding.right}
+                  y2={chartHeight - chartPadding.bottom}
+                  stroke="rgba(255,255,255,0.25)"
+                  strokeWidth="1"
+                />
+                <line
+                  x1={chartPadding.left}
+                  y1={chartPadding.top}
+                  x2={chartPadding.left}
+                  y2={chartHeight - chartPadding.bottom}
+                  stroke="rgba(255,255,255,0.25)"
+                  strokeWidth="1"
+                />
+                <path
+                  d={areaPath}
+                  fill="rgba(255,255,255,0.08)"
+                  stroke="none"
+                />
+                <polyline
+                  points={linePoints}
+                  fill="none"
+                  stroke="rgba(255,255,255,0.7)"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+                {choiceScoreSeries.map((item, index) => {
+                  const x =
+                    chartPadding.left +
+                    ((chartWidth - chartPadding.left - chartPadding.right) *
+                      (choiceScoreSeries.length === 1 ? 0 : index)) /
+                      Math.max(choiceScoreSeries.length - 1, 1);
+                  const y =
+                    chartPadding.top +
+                    (chartHeight - chartPadding.top - chartPadding.bottom) *
+                      (1 - (item.score - scoreMin) / scoreRange);
+                  return (
+                    <g key={item.label}>
+                      <circle cx={x} cy={y} r="3.5" fill="rgba(255,255,255,0.85)" />
+                      <text
+                        x={x}
+                        y={y - 8}
+                        textAnchor="middle"
+                        fontSize="12"
+                        fill="rgba(255,255,255,0.65)"
+                      >
+                        {item.score}
+                      </text>
+                    </g>
+                  );
+                })}
+                <text
+                  x={chartWidth / 2}
+                  y={chartHeight - 6}
+                  textAnchor="middle"
+                  fontSize="12"
+                  fill="rgba(255,255,255,0.65)"
+                >
+                  선택지
+                </text>
+                <text
+                  x={12}
+                  y={chartHeight / 2}
+                  textAnchor="middle"
+                  fontSize="12"
+                  fill="rgba(255,255,255,0.65)"
+                  transform={`rotate(-90 12 ${chartHeight / 2})`}
+                >
+                  점수
+                </text>
+              </svg>
             </div>
           </div>
 
