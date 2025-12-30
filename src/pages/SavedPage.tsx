@@ -2,7 +2,7 @@ import React, { useMemo, useEffect, useState } from 'react';
 import { useGameStore } from '../stores/gameStore';
 import { getRandomBackground } from '../utils/randomBackground';
 import MainBar from '../components/ui/main_bar.tsx';
-import type { ActivityType, ParticipantType, SavedGameSummary } from '../types/game';
+import type { ActivityType, ParticipantType, SavedGameSummary, AnalysisData } from '../types/game';
 import { gameLocalStorage, type StoredGameState } from '../utils/localStorage';
 
 const participantLabel: Record<ParticipantType, string> = {
@@ -111,8 +111,32 @@ const SavedPage: React.FC = () => {
     const maxScore = Math.max(selectedGame.choices.length * 5, 5);
     const percentage = Math.round((totalScore / maxScore) * 100);
     const safetyGrade = getSafetyGrade(percentage);
-    const strengths = mockStrengths.slice(0, safetyGrade === 'A' || safetyGrade === 'B' ? 3 : 2);
-    const improvements = mockImprovements.slice(0, safetyGrade === 'F' || safetyGrade === 'D' ? 3 : 2);
+
+    // 저장된 분석 결과에서 API 데이터 확인
+    const savedAnalysis = selectedGameId ? gameLocalStorage.getAnalysisResult(selectedGameId) : null;
+    const apiAnalysis = savedAnalysis?.apiAnalysis;
+
+    // API 데이터가 있으면 사용, 없으면 목 데이터 사용
+    let strengths: string[];
+    let improvements: string[];
+
+    if (apiAnalysis) {
+      // API good_points를 줄바꿈으로 분할하여 강점으로 사용
+      strengths = apiAnalysis.good_points
+        .split('\n')
+        .map(point => point.trim())
+        .filter(point => point.length > 0);
+
+      // API improvements를 줄바꿈으로 분할하여 개선점으로 사용
+      improvements = apiAnalysis.improvements
+        .split('\n')
+        .map(point => point.trim())
+        .filter(point => point.length > 0);
+    } else {
+      // 목 데이터 사용
+      strengths = mockStrengths.slice(0, safetyGrade === 'A' || safetyGrade === 'B' ? 3 : 2);
+      improvements = mockImprovements.slice(0, safetyGrade === 'F' || safetyGrade === 'D' ? 3 : 2);
+    }
 
     const scenarioById = new Map(selectedGame.scenarios.map(scenario => [scenario.id, scenario]));
 

@@ -87,6 +87,15 @@ export interface AnalysisData {
   improvements: string[];
   detailedFeedback: ScenarioFeedback[];
   summary: string;
+  // API에서 받은 분석 결과 (옵션널)
+  apiAnalysis?: APIAnalysisResponse;
+}
+
+// API Analysis Response Types
+export interface APIAnalysisResponse {
+  overall_evaluation: string;
+  good_points: string;
+  improvements: string;
 }
 
 // Game Creation Response
@@ -159,6 +168,10 @@ export interface GameStore {
   deleteSavedGame: (gameId: string) => void;
   getSavedGames: () => SavedGameSummary[];
   loadLastActiveGame: () => boolean;
+
+  // Analysis Results Actions
+  saveAnalysisResult: (gameId: string, analysisData: AnalysisData) => void;
+  getAnalysisResult: (gameId: string) => AnalysisData | null;
 }
 
 export interface UIStore {
