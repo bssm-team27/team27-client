@@ -12,6 +12,19 @@
 }
 
 @layer components {
+  @keyframes arrow-float {
+    0%, 100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-8px);
+    }
+  }
+
+  .arrow-float {
+    animation: arrow-float 2s ease-in-out infinite;
+  }
+
   .btn-primary {
     @apply bg-sky-600 hover:bg-sky-700 text-white font-medium py-3 px-6 rounded-lg transition-colors duration-200 shadow-lg hover:shadow-xl;
   }
