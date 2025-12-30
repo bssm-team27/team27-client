@@ -182,7 +182,7 @@ export const createMockGame = (setup: GameSetup): GameCreationResponse => {
 };
 
 // 선택지 응답 모의 데이터
-export const getMockChoiceResponse = (gameId: string, choiceId: string): ChoiceResponse => {
+export const getMockChoiceResponse = (_gameId: string, choiceId: string): ChoiceResponse => {
   const scenarios = Object.values(ACTIVITY_SCENARIOS).flat();
 
   // 현재 시나리오와 선택지 찾기
