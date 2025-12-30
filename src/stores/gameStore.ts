@@ -7,6 +7,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
   gameState: null,
   currentPage: 'main',
   error: null,
+  backgroundImage: null,
 
   // Actions
   setCurrentPage: (page: PageType) => {
@@ -15,6 +16,10 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
   setError: (error: string | null) => {
     set({ error });
+  },
+
+  setBackgroundImage: (image: string) => {
+    set({ backgroundImage: image });
   },
 
   createGame: async (setup: GameSetup) => {
@@ -196,7 +201,8 @@ export const useGameStore = create<GameStore>((set, get) => ({
     set({
       gameState: null,
       currentPage: 'main',
-      error: null
+      error: null,
+      backgroundImage: null
     });
   }
 }));

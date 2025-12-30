@@ -1,15 +1,25 @@
-import React, {useMemo, useState} from 'react';
+import React, {useEffect, useMemo, useState} from 'react';
 import { useGameStore } from '../stores/gameStore';
 import { Button, LoadingSpinner } from '../components/ui';
 import type { ParticipantType, ActivityType } from '../types/game';
 import { getRandomBackground } from '../utils/randomBackground';
 
 const GameSetupPage: React.FC = () => {
-  const { gameState, createGame, setCurrentPage } = useGameStore();
+  const { gameState, createGame, setCurrentPage, backgroundImage, setBackgroundImage } = useGameStore();
   const [participants, setParticipants] = useState<ParticipantType>('single');
   const [activity, setActivity] = useState<ActivityType>('swimming');
-
   const isLoading = gameState?.isLoading && gameState?.loadingType === 'game-creating';
+
+  const selectedBackground = useMemo(
+      () => backgroundImage ?? getRandomBackground(),
+      [backgroundImage]
+  );
+
+  useEffect(() => {
+    if (!backgroundImage) {
+      setBackgroundImage(selectedBackground);
+    }
+  }, [backgroundImage, selectedBackground, setBackgroundImage]);
 
   const handleBack = () => {
     setCurrentPage('main');
@@ -18,7 +28,6 @@ const GameSetupPage: React.FC = () => {
   const handleStartGame = async () => {
     await createGame({ participants, activity });
   };
-  const backgroundImage = useMemo(() => getRandomBackground(), []);
   const participantOptions = [
     { value: 'single' as ParticipantType, label: '혼자', description: '1인 활동 시나리오', icon: '🧑‍🦲' },
     { value: 'double' as ParticipantType, label: '둘이서', description: '2인 활동 시나리오', icon: '👫' },
@@ -54,8 +63,12 @@ const GameSetupPage: React.FC = () => {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen" style={{ backgroundImage: `url(${backgroundImage})` }}>
-        <div className="card p-12 text-center max-w-md">
+      <div
+        className="relative min-h-screen bg-cover bg-center flex items-center justify-center p-4"
+        style={{ backgroundImage: `url(${selectedBackground})` }}
+      >
+        <div className="absolute inset-0 bg-black/30" />
+        <div className="card p-12 text-center max-w-md relative z-10">
           <LoadingSpinner size="lg" message="AI가 맞춤형 시나리오를 생성하고 있습니다..." />
         </div>
       </div>
@@ -63,8 +76,13 @@ const GameSetupPage: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen" style={{ backgroundImage: `url(${backgroundImage})` }}>
-      <div className="max-w-4xl mx-auto">
+    <div
+      className="relative min-h-screen bg-cover bg-center p-4"
+      style={{ backgroundImage: `url(${selectedBackground})` }}
+    >
+      <div className="absolute inset-0 bg-black/30" />
+
+      <div className="max-w-4xl mx-auto relative z-10">
         {/* 헤더 */}
         <div className="text-center mb-8 animate-fade-in">
           <button
