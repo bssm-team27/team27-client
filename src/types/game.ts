@@ -31,14 +31,13 @@ export interface Scenario {
   backgroundImageUrl: string;
   choices: Choice[];
   context: string;
+  previousResult?: string; // 이전 선택의 결과
 }
 
 export interface Choice {
   id: string;
   text: string;
-  consequence?: string;
   safetyRating: number; // 1-5, 5 being safest
-  explanation?: string;
 }
 
 // Game State Types

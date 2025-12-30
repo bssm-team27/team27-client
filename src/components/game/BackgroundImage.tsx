@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import type { BackgroundImageProps } from '../../types/game';
 import LoadingSpinner from '../ui/LoadingSpinner';
 
@@ -10,6 +10,12 @@ const BackgroundImage: React.FC<BackgroundImageProps> = ({
   const [imageLoaded, setImageLoaded] = useState(false);
   const [imageError, setImageError] = useState(false);
 
+  // imageUrl이 변경되면 상태 리셋
+  useEffect(() => {
+    setImageLoaded(false);
+    setImageError(false);
+  }, [imageUrl]);
+
   const handleImageLoad = () => {
     setImageLoaded(true);
   };
@@ -19,16 +25,7 @@ const BackgroundImage: React.FC<BackgroundImageProps> = ({
     setImageLoaded(false);
   };
 
-  if (isLoading || (!imageLoaded && !imageError)) {
-    return (
-      <div className="absolute inset-0 bg-gradient-to-b from-sky-300 to-sky-500">
-        <div className="flex items-center justify-center h-full">
-          <LoadingSpinner size="lg" message="배경 이미지 로딩 중..." />
-        </div>
-      </div>
-    );
-  }
-
+  // 에러 발생 시 폴백 UI
   if (imageError) {
     return (
       <div className="absolute inset-0 bg-gradient-to-b from-sky-300 to-sky-500 flex items-center justify-center">
@@ -45,15 +42,30 @@ const BackgroundImage: React.FC<BackgroundImageProps> = ({
 
   return (
     <>
+      {/* 이미지가 로드되기 전 로딩 UI */}
+      {(isLoading || !imageLoaded) && (
+        <div className="absolute inset-0 bg-gradient-to-b from-sky-300 to-sky-500">
+          <div className="flex items-center justify-center h-full">
+            <LoadingSpinner size="lg" message="배경 이미지 로딩 중..." />
+          </div>
+        </div>
+      )}
+
+      {/* 이미지는 항상 렌더링 (숨겨진 상태로 로드) */}
       <img
         src={imageUrl}
         alt={altText}
-        className="absolute inset-0 w-full h-full object-cover"
+        className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-500 ${
+          imageLoaded ? 'opacity-100' : 'opacity-0'
+        }`}
         onLoad={handleImageLoad}
         onError={handleImageError}
       />
-      {/* 오버레이 그라디언트 */}
-      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
+
+      {/* 이미지 로드 완료 시 오버레이 그라디언트 */}
+      {imageLoaded && (
+        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
+      )}
     </>
   );
 };

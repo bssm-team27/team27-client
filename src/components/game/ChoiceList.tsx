@@ -19,22 +19,6 @@ const ChoiceList: React.FC<ChoiceListProps> = ({
     }, 500);
   };
 
-  const getSafetyIcon = (rating: number) => {
-    if (rating >= 5) return '🛡️';
-    if (rating >= 4) return '✅';
-    if (rating >= 3) return '⚠️';
-    if (rating >= 2) return '❌';
-    return '🚫';
-  };
-
-  const getSafetyColor = (rating: number) => {
-    if (rating >= 5) return 'border-green-400 bg-green-50 hover:bg-green-100';
-    if (rating >= 4) return 'border-blue-400 bg-blue-50 hover:bg-blue-100';
-    if (rating >= 3) return 'border-yellow-400 bg-yellow-50 hover:bg-yellow-100';
-    if (rating >= 2) return 'border-orange-400 bg-orange-50 hover:bg-orange-100';
-    return 'border-red-400 bg-red-50 hover:bg-red-100';
-  };
-
   return (
     <div className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black/80 to-transparent">
       <div className="max-w-4xl mx-auto">
@@ -55,7 +39,7 @@ const ChoiceList: React.FC<ChoiceListProps> = ({
                   relative p-6 rounded-xl border-2 transition-all duration-300 text-left
                   ${isSelected
                     ? 'bg-sky-600 border-sky-400 text-white transform scale-105 shadow-2xl'
-                    : `bg-white/95 backdrop-blur-sm hover:bg-white text-gray-800 shadow-lg hover:shadow-xl transform hover:scale-102 ${getSafetyColor(choice.safetyRating)}`
+                    : 'bg-white/95 backdrop-blur-sm hover:bg-sky-50 border-gray-200 hover:border-sky-300 text-gray-800 shadow-lg hover:shadow-xl transform hover:scale-102'
                   }
                   ${disabled ? 'cursor-not-allowed opacity-50' : 'cursor-pointer'}
                   animate-slide-up
@@ -75,21 +59,10 @@ const ChoiceList: React.FC<ChoiceListProps> = ({
                   {choiceNumber}
                 </div>
 
-                {/* 안전도 표시 */}
-                <div className="absolute top-3 right-3 text-xl">
-                  {getSafetyIcon(choice.safetyRating)}
-                </div>
-
                 <div className="mt-8">
                   <p className={`font-medium leading-relaxed ${isSelected ? 'text-white' : 'text-gray-800'}`}>
                     {choice.text}
                   </p>
-
-                  {choice.explanation && (
-                    <p className={`mt-3 text-sm ${isSelected ? 'text-sky-100' : 'text-gray-600'}`}>
-                      {choice.explanation}
-                    </p>
-                  )}
                 </div>
 
                 {/* 선택 완료 표시 */}
