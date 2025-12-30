@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import type {GameStore, GameSetup, PageType, AnalysisData, APIAnalysisResponse} from '../types/game';
+import type {GameStore, GameSetup, PageType, AnalysisData} from '../types/game';
 import { gameAPI } from '../api/gameAPI';
 import { getRandomBackground } from '../utils/randomBackground';
 import { gameLocalStorage } from '../utils/localStorage';
