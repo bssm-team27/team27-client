@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
 import { useGameStore } from '../stores/gameStore';
 import { getRandomBackground } from '../utils/randomBackground';
-import MainBar from '../components/main_bar';
+import MainBar from '../components/ui/main_bar.tsx';
 import type { ActivityType, ParticipantType } from '../types/game';
 
 const participantLabel: Record<ParticipantType, string> = {

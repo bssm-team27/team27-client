@@ -1,6 +1,6 @@
 import React from 'react';
-import { useGameStore } from '../stores/gameStore';
-import type { PageType } from '../types/game';
+import { useGameStore } from '../../stores/gameStore.ts';
+import type { PageType } from '../../types/game.ts';
 
 type MainBarProps = {
   className?: string;
@@ -9,7 +9,7 @@ type MainBarProps = {
 
 const navItems: Array<{ id: PageType; label: string }> = [
   { id: 'main', label: '메인' },
-  { id: 'saved', label: '저장' }
+  { id: 'saved', label: '기록' }
 ];
 
 const MainBar: React.FC<MainBarProps> = ({ className, position = 'sticky' }) => {
