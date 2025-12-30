@@ -76,7 +76,7 @@ const GameSetupPage: React.FC = () => {
     >
       <div className="absolute inset-0 bg-black/30" />
 
-      <div className="max-w-4xl mx-auto relative z-10">
+      <div className="max-w-2xl mx-auto relative z-10">
         {/* 헤더 */}
         <div className="text-center mb-8 animate-fade-in">
           <button
@@ -106,7 +106,7 @@ const GameSetupPage: React.FC = () => {
                 <label
                   key={option.value}
                   className={`
-                    flex items-center p-4 rounded-lg border-2 cursor-pointer transition-all duration-200 backdrop-blur
+                    -mx-2 flex items-center p-4 rounded-lg border-2 cursor-pointer transition-all duration-200 backdrop-blur
                     ${participants === option.value
                       ? 'bg-white text-gray-900 border-white shadow-lg'
                       : 'bg-white/15 text-white border-white/40 hover:border-white hover:bg-white/25'
@@ -155,9 +155,9 @@ const GameSetupPage: React.FC = () => {
                 <label
                   key={option.value}
                   className={`
-                    flex items-center p-6 rounded-xl border-2 cursor-pointer transition-all duration-200 transform backdrop-blur
+                    -mx-2 flex items-center p-5 rounded-xl border-2 cursor-pointer transition-all duration-200 transform backdrop-blur
                     ${activity === option.value
-                      ? 'bg-white text-gray-900 border-white shadow-lg scale-105'
+                      ? 'bg-white text-gray-900 border-white shadow-lg'
                       : 'bg-white/15 text-white border-white/35 hover:border-white hover:bg-white/25'
                     }
                   `}
@@ -175,7 +175,7 @@ const GameSetupPage: React.FC = () => {
                     <div className={`font-semibold text-lg ${activity === option.value ? 'text-gray-900' : 'text-white'}`}>
                       {option.label}
                     </div>
-                    <div className={`${activity === option.value ? 'text-gray-600' : 'text-gray-200'}`}>
+                    <div className={`text-sm ${activity === option.value ? 'text-gray-600' : 'text-gray-200'}`}>
                       {option.description}
                     </div>
                   </div>
