@@ -2,6 +2,7 @@ import React, { useMemo } from 'react';
 import { useGameStore } from '../stores/gameStore';
 import { getRandomBackground } from '../utils/randomBackground';
 import Arrow from "../assets/arrow.svg"
+import MainBar from '../components/main_bar';
 
 const MainPage: React.FC = () => {
   const setCurrentPage = useGameStore(state => state.setCurrentPage);
@@ -23,6 +24,7 @@ const MainPage: React.FC = () => {
       onClick={handleStartGame}
     >
       <div className="absolute inset-0 bg-black/20" />
+      <MainBar position="absolute" />
 
       <div className="max-w-4xl mx-auto text-center relative z-10">
         {/* 헤더 */}

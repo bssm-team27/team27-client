@@ -6,7 +6,7 @@ export type ActivityType = 'swimming' | 'fishing' | 'leisure';
 export type GamePhase = 'setup' | 'playing' | 'analysis' | 'finished';
 
 // UI Types
-export type PageType = 'main' | 'setup' | 'game' | 'analysis';
+export type PageType = 'main' | 'setup' | 'game' | 'analysis' | 'saved';
 export type LoadingType = 'game-creating' | 'scenario-loading' | 'analysis-loading';
 
 // API Response Types

@@ -1,5 +1,5 @@
 import { useGameStore } from './stores/gameStore';
-import { MainPage, GameSetupPage, GameplayPage, AnalysisPage } from './pages';
+import { MainPage, GameSetupPage, GameplayPage, AnalysisPage, SavedPage } from './pages';
 
 function App() {
   const currentPage = useGameStore(state => state.currentPage);
@@ -14,6 +14,8 @@ function App() {
         return <GameplayPage />;
       case 'analysis':
         return <AnalysisPage />;
+      case 'saved':
+        return <SavedPage />;
       default:
         return <MainPage />;
     }
