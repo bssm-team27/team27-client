@@ -227,7 +227,7 @@ const AnalysisPage: React.FC = () => {
           </div>
 
           {/* 선택지별 점수 그래프 */}
-          <div className="p-8 mt-8 animate-slide-up bg-black/20 border border-white/20 backdrop-blur rounded-xl shadow-2xl" style={{ animationDelay: '350ms' }}>
+          <div className="p-8 mt-8 animate-slide-up bg-white/10 border border-white/20 backdrop-blur rounded-xl shadow-2xl" style={{ animationDelay: '350ms' }}>
             <h2 className="text-xl font-semibold text-white mb-6">선택지별 점수 추이</h2>
             <svg
               className="w-full"
