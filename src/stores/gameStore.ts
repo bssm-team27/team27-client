@@ -189,21 +189,24 @@ export const useGameStore = create<GameStore>((set, get) => ({
       const response = await gameAPI.getAnalysis(gameState.gameId);
 
       if (response.success && response.data) {
-        const updatedGameState = get().gameState ? {
-          ...get().gameState,
-          isLoading: false,
-          loadingType: undefined,
-          phase: 'finished' as const
-        } : null;
+        set((state) => {
+          if (!state.gameState) return state;
 
-        set(() => ({
-          gameState: updatedGameState
-        }));
+          const updatedGameState = {
+            ...state.gameState,
+            isLoading: false,
+            loadingType: undefined,
+            phase: 'finished' as const
+          };
 
-        // Save to localStorage
-        if (updatedGameState) {
+          // Save to localStorage
           gameLocalStorage.saveGame(updatedGameState);
-        }
+
+          return {
+            ...state,
+            gameState: updatedGameState
+          };
+        });
 
         return response.data;
       } else {
