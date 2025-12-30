@@ -60,6 +60,16 @@ export interface GameChoice {
   safetyRating: number;
 }
 
+// LocalStorage Types
+export interface SavedGameSummary {
+  gameId: string;
+  setup: GameSetup;
+  phase: GamePhase;
+  lastSaved: string;
+  scenarioCount: number;
+  choiceCount: number;
+}
+
 // Analysis Types
 export interface ScenarioFeedback {
   scenarioId: string;
@@ -143,6 +153,12 @@ export interface GameStore {
   selectChoice: (choiceId: string) => Promise<void>;
   getAnalysis: () => Promise<AnalysisData | null>;
   resetGame: () => void;
+
+  // LocalStorage Actions
+  loadSavedGame: (gameId: string) => void;
+  deleteSavedGame: (gameId: string) => void;
+  getSavedGames: () => SavedGameSummary[];
+  loadLastActiveGame: () => boolean;
 }
 
 export interface UIStore {

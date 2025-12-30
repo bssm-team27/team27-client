@@ -2,6 +2,7 @@ import { create } from 'zustand';
 import type {GameStore, GameSetup, PageType, AnalysisData} from '../types/game';
 import { gameAPI } from '../api/gameAPI';
 import { getRandomBackground } from '../utils/randomBackground';
+import { gameLocalStorage } from '../utils/localStorage';
 
 export const useGameStore = create<GameStore>((set, get) => ({
   // State
@@ -46,19 +47,24 @@ export const useGameStore = create<GameStore>((set, get) => ({
       if (response.success && response.data) {
         const { gameId, initialScenario } = response.data;
 
+        const newGameState = {
+          gameId,
+          setup,
+          currentScenarioIndex: 0,
+          scenarios: [initialScenario],
+          choices: [],
+          phase: 'playing' as const,
+          isLoading: false,
+          loadingType: undefined
+        };
+
         set(() => ({
-          gameState: {
-            gameId,
-            setup,
-            currentScenarioIndex: 0,
-            scenarios: [initialScenario],
-            choices: [],
-            phase: 'playing',
-            isLoading: false,
-            loadingType: undefined
-          },
+          gameState: newGameState,
           currentPage: 'game'
         }));
+
+        // Save to localStorage
+        gameLocalStorage.saveGame(newGameState);
       } else {
         throw new Error(response.error || '게임 생성에 실패했습니다.');
       }
@@ -110,30 +116,41 @@ export const useGameStore = create<GameStore>((set, get) => ({
           if (!state.gameState) return state;
 
           const updatedChoices = [...state.gameState.choices, newChoice];
+          let updatedGameState;
 
           if (isGameComplete) {
+            updatedGameState = {
+              ...state.gameState,
+              choices: updatedChoices,
+              phase: 'analysis' as const,
+              isLoading: false,
+              loadingType: undefined
+            };
+
+            // Save to localStorage
+            gameLocalStorage.saveGame(updatedGameState);
+
             return {
               ...state,
-              gameState: {
-                ...state.gameState,
-                choices: updatedChoices,
-                phase: 'analysis',
-                isLoading: false,
-                loadingType: undefined
-              },
+              gameState: updatedGameState,
               currentPage: 'analysis'
             };
           } else if (nextScenario) {
+            updatedGameState = {
+              ...state.gameState,
+              currentScenarioIndex: state.gameState.currentScenarioIndex + 1,
+              scenarios: [...state.gameState.scenarios, nextScenario],
+              choices: updatedChoices,
+              isLoading: false,
+              loadingType: undefined
+            };
+
+            // Save to localStorage
+            gameLocalStorage.saveGame(updatedGameState);
+
             return {
               ...state,
-              gameState: {
-                ...state.gameState,
-                currentScenarioIndex: state.gameState.currentScenarioIndex + 1,
-                scenarios: [...state.gameState.scenarios, nextScenario],
-                choices: updatedChoices,
-                isLoading: false,
-                loadingType: undefined
-              }
+              gameState: updatedGameState
             };
           }
 
@@ -172,14 +189,24 @@ export const useGameStore = create<GameStore>((set, get) => ({
       const response = await gameAPI.getAnalysis(gameState.gameId);
 
       if (response.success && response.data) {
-        set((state) => ({
-          gameState: state.gameState ? {
+        set((state) => {
+          if (!state.gameState) return state;
+
+          const updatedGameState = {
             ...state.gameState,
             isLoading: false,
             loadingType: undefined,
-            phase: 'finished'
-          } : null
-        }));
+            phase: 'finished' as const
+          };
+
+          // Save to localStorage
+          gameLocalStorage.saveGame(updatedGameState);
+
+          return {
+            ...state,
+            gameState: updatedGameState
+          };
+        });
 
         return response.data;
       } else {
@@ -205,5 +232,84 @@ export const useGameStore = create<GameStore>((set, get) => ({
       error: null,
       backgroundImage: getRandomBackground()
     });
+  },
+
+  loadSavedGame: (gameId: string) => {
+    try {
+      set({ error: null });
+      const savedGame = gameLocalStorage.loadGame(gameId);
+
+      if (savedGame) {
+        const pageMap: Record<string, PageType> = {
+          'setup': 'setup',
+          'playing': 'game',
+          'analysis': 'analysis',
+          'finished': 'analysis'
+        };
+
+        set({
+          gameState: savedGame,
+          currentPage: pageMap[savedGame.phase] || 'main'
+        });
+      } else {
+        throw new Error('저장된 게임을 찾을 수 없습니다.');
+      }
+    } catch (error) {
+      set({
+        error: error instanceof Error ? error.message : '게임 로드 중 오류가 발생했습니다.'
+      });
+    }
+  },
+
+  deleteSavedGame: (gameId: string) => {
+    try {
+      gameLocalStorage.deleteGame(gameId);
+      const currentGameState = get().gameState;
+
+      if (currentGameState && currentGameState.gameId === gameId) {
+        set({
+          gameState: null,
+          currentPage: 'main',
+          error: null,
+          backgroundImage: getRandomBackground()
+        });
+      }
+    } catch (error) {
+      set({
+        error: error instanceof Error ? error.message : '게임 삭제 중 오류가 발생했습니다.'
+      });
+    }
+  },
+
+  getSavedGames: () => {
+    return gameLocalStorage.getGamesSummary();
+  },
+
+  loadLastActiveGame: () => {
+    try {
+      const activeGameId = gameLocalStorage.getActiveGameId();
+      if (activeGameId) {
+        const savedGame = gameLocalStorage.loadGame(activeGameId);
+        if (savedGame) {
+          const pageMap: Record<string, PageType> = {
+            'setup': 'setup',
+            'playing': 'game',
+            'analysis': 'analysis',
+            'finished': 'analysis'
+          };
+
+          set({
+            gameState: savedGame,
+            currentPage: pageMap[savedGame.phase] || 'main',
+            error: null
+          });
+          return true;
+        }
+      }
+      return false;
+    } catch (error) {
+      console.error('마지막 활성 게임 로드 실패:', error);
+      return false;
+    }
   }
 }));
