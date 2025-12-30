@@ -1,4 +1,3 @@
-import React from 'react';
 import { useGameStore } from './stores/gameStore';
 import { MainPage, GameSetupPage, GameplayPage, AnalysisPage } from './pages';
 

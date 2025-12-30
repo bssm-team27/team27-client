@@ -5,7 +5,12 @@ import Arrow from "../assets/arrow.svg"
 
 const MainPage: React.FC = () => {
   const setCurrentPage = useGameStore(state => state.setCurrentPage);
-  const backgroundImage = useMemo(() => getRandomBackground(), []);
+  const backgroundImage = useGameStore(state => state.backgroundImage);
+
+  const selectedBackground = useMemo(
+    () => backgroundImage ?? getRandomBackground(),
+    [backgroundImage]
+  );
 
   const handleStartGame = () => {
     setCurrentPage('setup');
@@ -14,14 +19,14 @@ const MainPage: React.FC = () => {
   return (
     <div
       className="relative min-h-screen bg-cover bg-center flex items-center justify-center p-4"
-      style={{ backgroundImage: `url(${backgroundImage})` }}
+      style={{ backgroundImage: `url(${selectedBackground})` }}
       onClick={handleStartGame}
     >
       <div className="absolute inset-0 bg-black/20" />
 
       <div className="max-w-4xl mx-auto text-center relative z-10">
         {/* 헤더 */}
-          <div className="flex flex-col justify-center items-center justify-center mb-2">
+          <div className="flex flex-col items-center mb-2">
             <div>
                 <h1 className="text-4xl font-bold text-white">
                   화면을 클릭해서 게임을 시작하세요

@@ -38,6 +38,7 @@ export interface Choice {
   id: string;
   text: string;
   safetyRating: number; // 1-5, 5 being safest
+  explanation?: string;
 }
 
 // Game State Types
@@ -132,10 +133,12 @@ export interface GameStore {
   gameState: GameState | null;
   currentPage: PageType;
   error: string | null;
+  backgroundImage: string | null;
 
   // Actions
   setCurrentPage: (page: PageType) => void;
   setError: (error: string | null) => void;
+  setBackgroundImage: (image: string) => void;
   createGame: (setup: GameSetup) => Promise<void>;
   selectChoice: (choiceId: string) => Promise<void>;
   getAnalysis: () => Promise<AnalysisData | null>;

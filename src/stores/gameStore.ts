@@ -1,12 +1,14 @@
 import { create } from 'zustand';
 import type {GameStore, GameSetup, PageType, AnalysisData} from '../types/game';
 import { gameAPI } from '../api/gameAPI';
+import { getRandomBackground } from '../utils/randomBackground';
 
 export const useGameStore = create<GameStore>((set, get) => ({
   // State
   gameState: null,
   currentPage: 'main',
   error: null,
+  backgroundImage: getRandomBackground(),
 
   // Actions
   setCurrentPage: (page: PageType) => {
@@ -15,6 +17,10 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
   setError: (error: string | null) => {
     set({ error });
+  },
+
+  setBackgroundImage: (image: string) => {
+    set({ backgroundImage: image });
   },
 
   createGame: async (setup: GameSetup) => {
@@ -196,7 +202,8 @@ export const useGameStore = create<GameStore>((set, get) => ({
     set({
       gameState: null,
       currentPage: 'main',
-      error: null
+      error: null,
+      backgroundImage: getRandomBackground()
     });
   }
 }));
