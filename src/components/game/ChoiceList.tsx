@@ -20,9 +20,9 @@ const ChoiceList: React.FC<ChoiceListProps> = ({
   };
 
   return (
-    <div className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black/70 via-black/40 to-transparent">
-      <div className="max-w-4xl mx-auto">
-        <h3 className="text-xl font-semibold text-white mb-6 text-center">
+    <div className="w-full flex justify-center p-6 bg-transparent">
+      <div className="max-w-4xl w-full">
+        <h3 className="text-xl font-semibold text-white mb-6 text-center drop-shadow-[0_2px_6px_rgba(0,0,0,0.65)]">
           어떻게 하시겠습니까?
         </h3>
         <div className="grid gap-4 md:grid-cols-1 lg:grid-cols-3">
@@ -36,7 +36,7 @@ const ChoiceList: React.FC<ChoiceListProps> = ({
                 onClick={() => handleChoiceClick(choice.id)}
                 disabled={disabled || selectedChoice !== null}
                 className={`
-                  relative p-6 rounded-xl border-2 transition-all duration-300 text-left backdrop-blur
+                  relative p-6 rounded-xl border-2 transition-all duration-300 text-left
                   ${isSelected
                     ? 'bg-white text-gray-900 border-white shadow-2xl scale-105'
                     : 'bg-white/15 text-white border-white/35 hover:border-white hover:bg-white/25 shadow-lg hover:shadow-xl hover:scale-[1.02]'

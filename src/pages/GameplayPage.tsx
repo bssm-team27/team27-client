@@ -61,7 +61,7 @@ const GameplayPage: React.FC = () => {
 
   return (
     <div
-      className="relative min-h-screen overflow-hidden cursor-pointer"
+      className="relative min-h-screen overflow-hidden cursor-pointer flex justify-center items-center "
       onClick={handleScreenClick}
     >
       {/* 배경 이미지 */}
